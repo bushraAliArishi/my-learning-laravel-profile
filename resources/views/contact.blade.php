@@ -1,4 +1,5 @@
 <x-layout title="Contact Us">
+    <x-slot:heading>contact us</x-slot:heading>
   <div class="bg-gradient-to-br from-slate-900 to-gray-800 min-h-screen flex items-center justify-center text-white">
     <div class="bg-gray-900 rounded-2xl shadow-lg p-8 w-full max-w-md">
       <h1 class="text-3xl font-bold text-center mb-2">Contact Us</h1>

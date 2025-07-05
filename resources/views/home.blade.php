@@ -1,5 +1,8 @@
-<x-layout title="Home">
+<x-layout title="Home" >
+        <x-slot:heading>Home</x-slot:heading>
+
   {{-- Hero Section --}}
+
 <section id="hero" class="pt-28 min-h-screen bg-gradient-to-b from-slate-100 to-white flex items-center justify-center text-center text-gray-900">
     <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="mb-8 animate-bounce">
