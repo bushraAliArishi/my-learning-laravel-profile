@@ -16,23 +16,24 @@
         ☰
       </button>
       <div id="links-desktop" class="hidden md:flex gap-6">
-        <a href="/" class="nav-link pb-1">Home</a>
-        <a href="/about-us" class="nav-link pb-1">About Us</a>
-        <a href="/contact" class="nav-link pb-1">Contact Us</a>
-        <a href="/#about" class="nav-link pb-1">About me</a>
-        <a href="/#projects" class="nav-link pb-1">Projects</a>
-        <a href="/#experience" class="nav-link pb-1">Experience</a>
-        <a href="/#contact" class="nav-link pb-1">Contact</a>
+        <x-nav-link href="/" >Home</x-nav-link>
+        <x-nav-link href="/about-us" >About Us</x-nav-link>
+        <x-nav-link href="/contact" >Contact Us</x-nav-link>
+        <x-nav-link href="/#about" >About me</x-nav-link>
+        <x-nav-link href="/#projects" >Projects</x-nav-link>
+        <x-nav-link href="/#experience" >Experience</x-nav-link>
+        <x-nav-link href="/#contact" >Contact</x-nav-link>
       </div>
     </div>
+    {{-- if ( : ) rpefix a name the value become boolian --}}
     <div id="links-mobile" class="md:hidden hidden flex-col gap-3 px-6 pb-4 bg-white shadow-md border-t border-gray-200">
-      <a href="/" class="nav-link pb-1">Home</a>
-      <a href="/about-us" class="nav-link pb-1">About Us</a>
-      <a href="/contact" class="nav-link pb-1">Contact Us</a>
-      <a href="#about" class="nav-link pb-1">About me</a>
-      <a href="#projects" class="nav-link pb-1">Projects</a>
-      <a href="#experience" class="nav-link pb-1">Experience</a>
-      <a href="#contact" class="nav-link pb-1">Contact</a>
+      <x-nav-link href="/">Home</x-nav-link>
+      <x-nav-link href="/about-us" >About Us</x-nav-link>
+      <x-nav-link href="/contact" >Contact Us</x-nav-link>
+      <x-nav-link href="#about" >About me</x-nav-link>
+      <x-nav-link href="#projects" >Projects</x-nav-link>
+      <x-nav-link href="#experience" >Experience</x-nav-link>
+      <x-nav-link href="#contact" >Contact</x-nav-link>
     </div>
   </nav>
   <header class="bg-white shadow">
