@@ -1,5 +1,5 @@
-<x-layout title="About">
-        <x-slot:heading>about</x-slot:heading>
+<x-layout title="{{ $title }}">
+        <x-slot:heading>{{ $heading }}</x-slot:heading>
 {{-- About Section --}}
 <section
   class="pt-28 min-h-screen

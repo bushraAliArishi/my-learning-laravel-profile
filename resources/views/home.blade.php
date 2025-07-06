@@ -1,5 +1,5 @@
-<x-layout title="Home" >
-        <x-slot:heading>Home</x-slot:heading>
+<x-layout title="{{ $title }}" >
+        <x-slot:heading>{{ $heading }}</x-slot:heading>
 
   {{-- Hero Section --}}
 

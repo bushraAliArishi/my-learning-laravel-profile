@@ -1,33 +1,38 @@
-<x-layout title="Projects">
-    <x-slot:heading>Projects</x-slot:heading>
+<x-layout title="{{ $title }}">
+  <x-slot name="heading">{{ $heading }}</x-slot>
 
-  {{-- Hero Section --}}
-<section
-  class="pt-28 min-h-screen
-         bg-gradient-to-b from-blue-50 to-white
-         flex items-center justify-center text-center
-         text-gray-900"
->    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-12">Featured Projects</h2>
-      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto text-left">
-        <div class="p-6 rounded-lg shadow bg-gray-50">
-          <h3 class="text-xl font-semibold mb-2">Focus – Booking Management System</h3>
-          <p class="mb-2">A backend system for photographers and editors, built with Java and Spring Boot.</p>
-          <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-            <li>Booking logic</li>
-            <li>Role-based access</li>
-            <li>API testing</li>
-          </ul>
-        </div>
-        <div class="p-6 rounded-lg shadow bg-gray-50">
-          <h3 class="text-xl font-semibold mb-2">Bani – Equipment Marketplace</h3>
-          <p class="mb-2">A no-code rental platform for heavy equipment, built with Bubble.</p>
-          <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-            <li>Login system</li>
-            <li>Payment flow</li>
-            <li>Team leadership</li>
-          </ul>
-        </div>
+  <section class="py-16 bg-white text-gray-800">
+    <div class="container mx-auto px-6">
+      <h2 class="text-4xl font-bold text-center mb-12">{{ $heading }}</h2>
+      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        @foreach($projects as $project)
+          <div class="p-6 bg-gray-50 rounded-lg shadow hover:shadow-lg transition">
+            <div class="flex justify-between items-start mb-4">
+              <h3 class="text-2xl font-semibold">{{ $project['title'] }}</h3>
+              <span class="text-sm text-gray-500">{{ $project['type'] }}</span>
+            </div>
+            <p class="text-gray-600 mb-4">{{ $project['description'] }}</p>
+            <ul class="list-disc pl-5 space-y-1 mb-4 text-gray-700">
+              @foreach($project['highlights'] as $highlight)
+                <li>{{ $highlight }}</li>
+              @endforeach
+            </ul>
+            <div class="flex flex-wrap gap-2 mb-6">
+              @foreach($project['tech'] as $tech)
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">{{ $tech }}</span>
+              @endforeach
+            </div>
+            <div class="text-right">
+              <a
+                href="{{ $project['link'] }}"
+                target="_blank"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition"
+              >
+                View Project
+              </a>
+            </div>
+          </div>
+        @endforeach
       </div>
     </div>
   </section>

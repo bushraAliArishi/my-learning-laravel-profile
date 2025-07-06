@@ -1,5 +1,5 @@
-<x-layout title="Contact Us">
-    <x-slot:heading>contact us</x-slot:heading>
+<x-layout title="{{ $title }}">
+    <x-slot:heading>{{ $heading }}</x-slot:heading>
     <section
   class="pt-28 min-h-screen
          bg-gradient-to-b from-blue-50 to-white
