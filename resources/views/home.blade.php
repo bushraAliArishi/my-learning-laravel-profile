@@ -3,8 +3,8 @@
 
   {{-- Hero Section --}}
 
-<section id="hero" class="pt-28 min-h-screen bg-gradient-to-b from-slate-100 to-white flex items-center justify-center text-center text-gray-900">
-    <div class="max-w-4xl mx-auto px-6 text-center">
+<section
+  class="pt-28 min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center text-center text-gray-900">    <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="mb-8 animate-bounce">
         <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -41,71 +41,6 @@
       </div>
     </div>
   </section>
-
-  {{-- About Section --}}
-  <section id="about" class="py-16 bg-gray-100 text-gray-800">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-6">About Me</h2>
-      <p class="max-w-3xl mx-auto text-lg leading-relaxed">
-        I'm a backend developer and no-code specialist passionate about automating internal systems and delivering scalable solutions for digital platforms. I focus on backend logic, system design, and managing platforms like Google Workspace, Bubble, and more.
-      </p>
-    </div>
-  </section>
-
-  {{-- Projects Section --}}
-  <section id="projects" class="py-16 bg-white text-gray-800">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-12">Featured Projects</h2>
-      <div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto text-left">
-        <div class="p-6 rounded-lg shadow bg-gray-50">
-          <h3 class="text-xl font-semibold mb-2">Focus – Booking Management System</h3>
-          <p class="mb-2">A backend system for photographers and editors, built with Java and Spring Boot.</p>
-          <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-            <li>Booking logic</li>
-            <li>Role-based access</li>
-            <li>API testing</li>
-          </ul>
-        </div>
-        <div class="p-6 rounded-lg shadow bg-gray-50">
-          <h3 class="text-xl font-semibold mb-2">Bani – Equipment Marketplace</h3>
-          <p class="mb-2">A no-code rental platform for heavy equipment, built with Bubble.</p>
-          <ul class="list-disc pl-5 text-sm text-gray-600 space-y-1">
-            <li>Login system</li>
-            <li>Payment flow</li>
-            <li>Team leadership</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {{-- Experience Section --}}
-  <section id="experience" class="py-16 bg-gray-100 text-gray-800">
-    <div class="container mx-auto px-6 text-center">
-      <h2 class="text-4xl font-bold mb-12">Professional Experience</h2>
-      <div class="max-w-4xl mx-auto space-y-6 text-left">
-        <div class="p-6 bg-white rounded-lg shadow">
-          <h3 class="text-xl font-semibold">Technical Specialist – i-be Group</h3>
-          <p class="text-sm text-gray-600 mb-2">Jan 2024 – Present</p>
-          <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
-            <li>Deployed mobile apps</li>
-            <li>Managed Google Workspace</li>
-            <li>Developed dashboards</li>
-          </ul>
-        </div>
-        <div class="p-6 bg-white rounded-lg shadow">
-          <h3 class="text-xl font-semibold">Senior Technical Developer – i-be</h3>
-          <p class="text-sm text-gray-600 mb-2">Aug 2022 – Jan 2024</p>
-          <ul class="list-disc pl-5 text-sm text-gray-700 space-y-1">
-            <li>Backend logic with Bubble</li>
-            <li>API integration</li>
-            <li>Intern training</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
-
   {{-- Contact Section --}}
   <section id="contact" class="py-16 bg-white text-gray-800">
     <div class="container mx-auto px-6 text-center max-w-2xl">

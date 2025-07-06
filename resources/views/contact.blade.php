@@ -1,5 +1,11 @@
 <x-layout title="Contact Us">
     <x-slot:heading>contact us</x-slot:heading>
+    <section
+  class="pt-28 min-h-screen
+         bg-gradient-to-b from-blue-50 to-white
+         flex items-center justify-center text-center
+         text-gray-900"
+>
   <div class="bg-gradient-to-br from-slate-900 to-gray-800 min-h-screen flex items-center justify-center text-white">
     <div class="bg-gray-900 rounded-2xl shadow-lg p-8 w-full max-w-md">
       <h1 class="text-3xl font-bold text-center mb-2">Contact Us</h1>
@@ -54,4 +60,5 @@
       </form>
     </div>
   </div>
+</section>
 </x-layout>

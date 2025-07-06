@@ -1,16 +1,28 @@
-@props(['href'])
-@props(['type'])
+@props([
+  'href'     => '#',
+  'active'   => false,
+  'type'     => 'a',
+  'variant'  => 'default',
+])
 
-@php
-    $current = trim(request()->path(), '/');
-    $target = trim(parse_url($href, PHP_URL_PATH), '/');
-
-    // $isActive = $current === $target;
-    // $classes = $isActive
-    //     ? 'border-b-4 border-gray-800 font-semibold'
-    //     : 'border-b-4 border-transparent hover:border-gray-400';
-@endphp
-
-<a href="{{ $href }}" {{ $attributes->merge(['class' => "hover:text-blue-400 pb-1 transition " ]) }}>
-    {{ $slot }}
+@if ($type === 'button' || $variant === 'dark')
+<button
+  type="button"
+  {{ $attributes->merge(['class' =>
+      'bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-2xl transition duration-200'
+  ]) }}
+>
+  {{ $slot }}
+</button>
+@else
+<a
+  href="{{ $href }}"
+  {{ $attributes->merge(['class' =>
+      $active
+        ? 'px-3 py-2 text-sm font-medium pb-1 border-b-4 border-gray-800 text-gray-900'
+        : 'px-3 py-2 text-sm font-medium pb-1 border-b-4 border-transparent text-gray-600 hover:text-gray-900 hover:border-gray-300'
+  ]) }}
+>
+  {{ $slot }}
 </a>
+@endif
