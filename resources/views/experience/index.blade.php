@@ -1,4 +1,3 @@
-<!-- resources/views/experience/index.blade.php -->
 <x-layout title="{{ $title }}">
   <x-slot name="heading">{{ $heading }}</x-slot>
 
@@ -7,12 +6,10 @@
       <h2 class="text-4xl font-bold text-center mb-12">Professional Experience Timeline</h2>
 
       <div class="relative max-w-2xl mx-auto">
-        <!-- الخط العمودي أبعد عن البطاقات -->
         <div class="absolute top-0 bottom-0 left-1/2 transform -translate-x-1 w-1 bg-gray-300 rounded"></div>
 
-        @foreach($experiences as $exp)
+        @foreach($experience as $exp)
           <div class="relative mb-16 flex items-start">
-            <!-- البطاقة موضوعة بجانب الخط -->
             <div class="w-full bg-white rounded-lg shadow-lg p-6  
                         @if($loop->iteration % 2 === 0)  
                           ml-50  <!-- بطاقات زوجية يمين الخط -->

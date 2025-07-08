@@ -44,28 +44,17 @@ Route::get('/projects', function () {
 });
 
 Route::get('/experience', function () {
-    $allExperiences = Experience::all();
 
-    return view('experience.index', [
-        'title'       => 'Experience',
-        'heading'     => 'Professional Experience',
-        'experiences' => $allExperiences,
-    ]);
+    return view('experience.index', [ 
+     'title'   => 'all experience',
+     'heading' => 'Learn More About Me',
+     'experience'=>Experience::all()]);
 });
 
 Route::get('/experience/{slug}', function (string $slug) {
-    $all = Experience::all();
+    return view('experience.show', [ 
+    'title'   => 'experience',
+     'heading' => 'Learn More About Me',
+     'exp'=>Experience::find($slug)]);
 
-    $experience = collect($all)
-        ->first(fn($e) => $e['slug'] === $slug);
-
-    if (! $experience) {
-        abort(404);
-    }
-
-    return view('experience.show', [
-        'title'   => $experience['title'],
-        'heading' => $experience['company'].' • '.$experience['period'],
-        'exp'     => (object) $experience,
-    ]);
 });

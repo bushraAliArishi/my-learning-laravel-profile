@@ -2,20 +2,15 @@
 
 namespace App\Models;
 
-use PhpParser\Node\Expr\Cast\String_;
+use Illuminate\Support\Arr;
+
 
 class Experience
 {
-    /**
-     * Return all experiences with their full data.
-     *
-     * @return array
-     */
     public static function all(): array
     {
         return [
 
-            // 1. Senior Technical Developer
             [
                 'slug'        => 'senior-technical-developer',
                 'title'       => 'Senior Technical Developer',
@@ -37,7 +32,7 @@ class Experience
                     [ 'name' => 'Zoom',                 'logo' => 'images/logos/zoom-svg-logo_logoshape.com.svg' ],
                     [ 'name' => 'Microsoft 365',        'logo' => 'images/logos/Microsoft_365_(2022).svg' ],
                     [ 'name' => 'Notion',               'logo' => 'images/logos/notion-logo-svgrepo-com.svg' ],
-                    [ 'name' => 'ClickUp',              'logo' => 'images/logos/trello-logo-svgrepo-com.svg' ], // example
+                    [ 'name' => 'ClickUp',              'logo' => 'images/logos/trello-logo-svgrepo-com.svg' ], 
                     [ 'name' => 'Lucidchart',           'logo' => 'images/logos/lucidchart.svg' ],
                 ],
                 'achievements'=> [
@@ -48,7 +43,6 @@ class Experience
                 'details'     => 'Primary operator of Google Admin Console for 1,000+ users—managed accounts, groups, and archiving; authored guides, led trainings, and spearheaded no-code medical initiatives.',
             ],
 
-            // 2. Technical Specialist
             [
                 'slug'        => 'technical-specialist',
                 'title'       => 'Technical Specialist',
@@ -77,7 +71,6 @@ class Experience
                 'details'     => 'Managed internal platform builds in Bubble.io, customized interfaces, supervised interns, and coordinated stakeholder meetings for alignment.',
             ],
 
-            // 3. No-Code Development Trainee
             [
                 'slug'        => 'jiff-trainee',
                 'title'       => 'No-Code Development Trainee',
@@ -100,7 +93,6 @@ class Experience
                 'details'     => 'Completed immersive Bubble.io training covering backend logic, responsive design, and automation workflows for production readiness.',
             ],
 
-            // 4. Call Center Agent
             [
                 'slug'        => 'call-center-agent',
                 'title'       => 'Call Center Agent',
@@ -112,9 +104,9 @@ class Experience
                     'Knowledge base creation',
                 ],
                 'tools'       => [
-                    [ 'name' => 'Zendesk',    'logo' => 'images/logos/discord-icon-svgrepo-com.svg' ], // substitute real zendesk.svg
+                    [ 'name' => 'Zendesk',    'logo' => 'images/logos/discord-icon-svgrepo-com.svg' ], 
                     [ 'name' => 'Outlook',    'logo' => 'images/logos/office-365-logo-svgrepo-com.svg' ],
-                    [ 'name' => 'VoIP System','logo' => 'images/logos/voip.png' ],               // if you have it
+                    [ 'name' => 'VoIP System','logo' => 'images/logos/voip.png' ],              
                 ],
                 'achievements'=> [
                     'Resolved 80+ daily technical queries via phone & email.',
@@ -123,7 +115,6 @@ class Experience
                 'details'     => 'Handled high-volume customer inquiries, resolved technical issues, and created self-help materials to improve support efficiency.',
             ],
 
-            // 5. Technical Intern
             [
                 'slug'        => 'technical-intern',
                 'title'       => 'Technical Intern',
@@ -137,8 +128,8 @@ class Experience
                 ],
                 'tools'       => [
                     [ 'name' => 'Google Cloud',   'logo' => 'images/logos/firebase-1-logo-svgrepo-com.svg' ],
-                    [ 'name' => 'Internal Tools', 'logo' => 'images/logos/icon-full-color.svg' ],   // placeholder
-                    [ 'name' => 'Lab Environments','logo'=> 'images/logos/lab.png' ],             // placeholder
+                    [ 'name' => 'Internal Tools', 'logo' => 'images/logos/icon-full-color.svg' ],   
+                    [ 'name' => 'Lab Environments','logo'=> 'images/logos/lab.png' ],           
                 ],
                 'achievements'=> [
                     'Participated in cloud & automation workshops.',
@@ -149,11 +140,14 @@ class Experience
 
         ];
     }
+    public static function find(String $slug):array
+    {
+        $exp=Arr::first(static::all(), fn($exp) =>$exp['slug'] === $slug);
+        if(!$exp){
+            abort(404, 'Experience not found');}
+        return $exp;
 
-    public static function find(String $slug):array{
-        $exp=Arr[]
-
-
-
+            
     }
+
 }
