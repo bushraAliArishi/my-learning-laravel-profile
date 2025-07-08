@@ -1,24 +1,62 @@
+{{-- resources/views/experience/show.blade.php --}}
 <x-layout title="{{ $title }}">
   <x-slot name="heading">{{ $heading }}</x-slot>
 
-  <section class="pt-28 py-16 bg-white text-gray-800">
-    <div class="container mx-auto px-6 max-w-3xl">
-      <h2 class="text-3xl font-bold mb-4">{{ $exp['title'] }}</h2>
-      <p class="text-sm text-gray-500 mb-6">{{ $heading }}</p>
+  <section class="pt-28 pb-16 bg-white text-gray-800">
+    <div class="container mx-auto px-6 max-w-3xl space-y-8">
 
-      <h3 class="text-xl font-semibold mb-3">Key Achievements</h3>
-      <ul class="list-disc pl-5 mb-6 space-y-2 text-gray-700">
-        @foreach($exp['achievements'] as $a)
-          <li>{{ $a }}</li>
-        @endforeach
-      </ul>
+      {{-- Title & Period --}}
+      <div class="space-y-2 text-center">
+        <h2 class="text-3xl font-bold">{{ $exp->title }}</h2>
+        <p class="text-sm text-gray-500">{{ $heading }}</p>
+      </div>
 
-      <h3 class="text-xl font-semibold mb-3">Details</h3>
-      <p class="leading-relaxed text-gray-700 mb-8">{{ $exp['details'] }}</p>
+      {{-- Details --}}
+      <div class="prose prose-lg mx-auto text-gray-700">
+        <p>{{ $exp->details }}</p>
+      </div>
 
+      {{-- Skills Section --}}
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Skills Acquired</h3>
+        <ul class="list-disc pl-6 space-y-2">
+          @foreach($exp->skills as $skill)
+            <li>{{ $skill }}</li>
+          @endforeach
+        </ul>
+      </div>
+
+      {{-- Achievements --}}
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Key Achievements</h3>
+        <ul class="list-disc pl-6 space-y-2">
+          @foreach($exp->achievements as $achievement)
+            <li>{{ $achievement }}</li>
+          @endforeach
+        </ul>
+      </div>
+
+      {{-- Tools & Technologies --}}
+      <div>
+        <h3 class="text-xl font-semibold mb-4">Tools & Technologies</h3>
+        <div class="flex flex-wrap gap-6 justify-center">
+          @foreach($exp->tools as $tool)
+            <div class="flex flex-col items-center w-24">
+              <img
+                src="{{ asset(ltrim($tool['logo'], '/')) }}"
+                alt="{{ $tool['name'] }} logo"
+                class="w-16 h-16 object-contain mb-2"
+              >
+              <span class="text-xs text-gray-600 text-center">{{ $tool['name'] }}</span>
+            </div>
+          @endforeach
+        </div>
+      </div>
+
+      {{-- Back Link --}}
       <div class="text-center">
-        <a href="/experience" class="text-indigo-600 hover:underline font-medium">
-          ← Back to all experiences
+        <a href="{{ url('/experience') }}" class="text-blue-600 hover:underline font-medium">
+          &larr; Back to all experiences
         </a>
       </div>
     </div>
