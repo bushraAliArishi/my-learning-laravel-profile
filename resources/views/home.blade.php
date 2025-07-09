@@ -4,7 +4,8 @@
   {{-- Hero Section --}}
 
 <section
-  class="pt-28 min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center text-center text-gray-900">    <div class="max-w-4xl mx-auto px-6 text-center">
+  class="pt-28 min-h-screen bg-gradient-to-b from-blue-50 to-white flex items-center justify-center text-center text-gray-900">    
+  <div class="max-w-4xl mx-auto px-6 text-center">
       <div class="mb-8 animate-bounce">
         <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center shadow-lg">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">

@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Tool extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -17,7 +20,7 @@ class Tool extends Model
     ];
 
     /**
-     * The experiences that use this tool.
+     * The experiences that use this tool (many-to-many).
      */
     public function experiences()
     {
@@ -30,7 +33,7 @@ class Tool extends Model
     }
 
     /**
-     * The projects that use this tool.
+     * The projects that use this tool (many-to-many).
      */
     public function projects()
     {

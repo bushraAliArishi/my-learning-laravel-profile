@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
 class Project extends Model
 {
+    use HasFactory;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -50,7 +53,7 @@ class Project extends Model
     }
 
     /**
-     * Return a host‐specific logo filename based on the given URL.
+     * Return a host-specific logo filename based on the given URL.
      */
     public static function hostLogo(string $url): string
     {
@@ -74,7 +77,7 @@ class Project extends Model
     }
 
     /**
-     * Return a tech‐specific icon filename based on the given tech name.
+     * Return a tech-specific icon filename based on the given tech name.
      */
     public static function techIcon(string $tech): string
     {

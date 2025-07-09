@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← استوردنا الـ trait
 use Illuminate\Database\Eloquent\Model;
 
 class ExperienceAchievement extends Model
 {
+    use HasFactory;   // ← ضفّينا الـ trait
+
     /**
      * The table associated with the model.
      *
