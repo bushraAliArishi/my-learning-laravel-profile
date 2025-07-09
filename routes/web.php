@@ -31,30 +31,41 @@ Route::get('/contact', function () {
         'title'   => 'Contact Us',
         'heading' => 'Get in Touch',
     ]);
-});
-
+});// /projects — قائمة المشاريع
 Route::get('/projects', function () {
-    $allProjects = Project::all();
+    // eager-load للعلاقات media, tags, tools اللي سويناها في Seeder والموديل
+    $projects = Project::with(['media', 'tags', 'tools'])->get();
 
     return view('projects', [
         'title'    => 'Projects',
         'heading'  => 'My Projects',
-        'projects' => $allProjects,
+        'projects' => $projects,
     ]);
 });
 
+// قائمة الخبرات
 Route::get('/experience', function () {
+    // eager-load للعلاقات skills, achievements, tools
+    $experiences = Experience::with(['skills', 'achievements', 'tools'])
+                             ->orderBy('start_date', 'desc')  // اذا عندك هذا الحقل
+                             ->get();
 
-    return view('experience.index', [ 
-     'title'   => 'all experience',
-     'heading' => 'Learn More About Me',
-     'experience'=>Experience::all()]);
+    return view('experience.index', [
+        'title'       => 'All Experience',
+        'heading'     => 'Learn More About Me',
+        'experiences' => $experiences,      // ← نقول experiences
+    ]);
 });
 
+// تفاصيل خبرة واحدة
 Route::get('/experience/{slug}', function (string $slug) {
-    return view('experience.show', [ 
-    'title'   => 'experience',
-     'heading' => 'Learn More About Me',
-     'exp'=>Experience::find($slug)]);
+    $exp = Experience::with(['skills', 'achievements', 'tools'])
+                     ->where('slug', $slug)
+                     ->firstOrFail();
 
+    return view('experience.show', [
+        'title'   => $exp->title,
+        'heading' => "{$exp->company} • {$exp->period}",
+        'exp'     => $exp,                   // ← نناديه exp
+    ]);
 });
