@@ -1,6 +1,7 @@
 {{-- resources/views/projects.blade.php --}}
 @php
   use App\Models\Project;
+  use Illuminate\Support\Str;
 
   // 1) جيب كل المشاريع مع العلاقات
   $dbProjects = Project::with(['media','tags','tools'])->get();
@@ -28,14 +29,12 @@
             {{-- Banner --}}
             <div class="p-6 flex items-center justify-center h-48 overflow-hidden">
               @if($useStatic)
-                {{-- static array --}}
                 <img 
                   src="{{ $project['image'] }}"
                   alt="{{ $project['title'] }}"
                   class="w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
                 >
               @else
-                {{-- from DB media relation --}}
                 @if($project->media->isNotEmpty())
                   <img 
                     src="{{ asset($project->media->first()->media_url) }}"
@@ -54,7 +53,7 @@
 
             <div class="p-6 flex-1 flex flex-col">
 
-              {{-- Host logo (اختياري) --}}
+              {{-- Host logo --}}
               <div class="flex justify-end mb-4">
                 <div class="bg-gray-100 p-1.5 rounded-full inline-flex items-center justify-center shadow-sm border border-gray-300">
                   @if($useStatic)
@@ -107,6 +106,35 @@
                       title="{{ $tool->name }}"
                       class="w-10 h-10 object-contain"
                     >
+                  @endforeach
+                @endif
+              </div>
+
+              {{-- Tags --}}
+              <div class="flex flex-wrap gap-2 mb-6">
+                @if($useStatic)
+                  @foreach($project['tags'] as $tag)
+                    @php
+                      $base = $tag['color_hex'];
+                      $bg   = Str::of($base)->replace('#','')->prepend('#')->__toString() . '33';
+                    @endphp
+                    <span
+                      class="px-3 py-1 rounded-full text-xs font-medium"
+                      style="background-color: {{ $bg }}; color: {{ $base }};">
+                      {{ $tag['name'] }}
+                    </span>
+                  @endforeach
+                @else
+                  @foreach($project->tags as $tag)
+                    @php
+                      $base = $tag->color_hex;
+                      $bg   = $base . '33';
+                    @endphp
+                    <span
+                      class="px-3 py-1 rounded-full text-xs font-medium"
+                      style="background-color: {{ $bg }}; color: {{ $base }};">
+                      {{ $tag->name }}
+                    </span>
                   @endforeach
                 @endif
               </div>

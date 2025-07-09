@@ -1,28 +1,18 @@
 <?php
+// database/seeders/DatabaseSeeder.php
 
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use App\Models\User;
-use Database\Seeders\ToolSeeder;
-use Database\Seeders\ExperienceSeeder;
-use Database\Seeders\ExperienceSkillsTableSeeder;
-use Database\Seeders\ExperienceAchievementsTableSeeder;
-use Database\Seeders\ExperienceToolTableSeeder;
-use Database\Seeders\ProjectSeeder;
-use Database\Seeders\ProjectMediaTableSeeder;
-use Database\Seeders\ProjectTagsTableSeeder;
-use Database\Seeders\ProjectToolTableSeeder;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
-     * Seed the application's database.
-     */
     public function run(): void
     {
-        // 1) أولاً نشغل جميع الـ seeders الخاصة بجداول الأدوات، الخبرات، المشاريع، الخ…
+        // 1) Static reference data
         $this->call([
+            TagSeeder::class,
             ToolSeeder::class,
             ExperienceSeeder::class,
             ExperienceSkillsTableSeeder::class,
@@ -30,18 +20,24 @@ class DatabaseSeeder extends Seeder
             ExperienceToolTableSeeder::class,
             ProjectSeeder::class,
             ProjectMediaTableSeeder::class,
-            ProjectTagsTableSeeder::class,
             ProjectToolTableSeeder::class,
         ]);
 
-        // 2) ثم ننشئ مستخدم تجريبي مطابق لأعمدة users الجديدة
-        User::factory()->create([
-            'first_name' => 'Test',
-            'last_name'  => 'User',
-            'username'   => 'testuser',
-            'phone'      => null,
-            'email'      => 'test@example.com',
-            'password'   => bcrypt('password'),
+        // 2) Bulk factories
+        $this->call([
+            FactorySeeder::class,
         ]);
+
+        // 3) Test user
+        \App\Models\User::updateOrCreate(
+            ['email' => 'test@example.com'],
+            [
+                'first_name'     => 'Test',
+                'last_name'      => 'User',
+                'username'       => 'testuser',
+                'password'       => bcrypt('password'),
+                'remember_token' => Str::random(10),
+            ]
+        );
     }
 }

@@ -1,10 +1,14 @@
 <?php
+// app/Models/Project.php
 
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
+use App\Models\Tag;
+use App\Models\Tool;
+use App\Models\ProjectMedia;
 
 class Project extends Model
 {
@@ -13,7 +17,7 @@ class Project extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<string>
+     * @var string[]
      */
     protected $fillable = [
         'slug',
@@ -24,19 +28,25 @@ class Project extends Model
     ];
 
     /**
+     * Projects ⇄ Tags (many-to-many).
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,
+            'project_tag',
+            'project_id',
+            'tag_id'
+        )->withTimestamps();
+    }
+
+    /**
      * Get the media (images/videos) for this project.
      */
     public function media()
     {
         return $this->hasMany(ProjectMedia::class);
-    }
 
-    /**
-     * Get the tags for this project.
-     */
-    public function tags()
-    {
-        return $this->hasMany(ProjectTag::class);
     }
 
     /**
@@ -49,7 +59,7 @@ class Project extends Model
             'project_tool',
             'project_id',
             'tool_id'
-        );
+        )->withTimestamps();
     }
 
     /**
