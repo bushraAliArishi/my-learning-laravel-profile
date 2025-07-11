@@ -69,8 +69,8 @@ Route::get('/projects', function (Request $request) {
         });
     }
 
-    $projects = $query->orderBy('created_at','desc')
-                      ->paginate(9)
+    $projects = $query->orderBy('created_at','asc')
+                      ->paginate(6)
                       ->withQueryString();
 
     return view('projects', compact('projects','allTags','allTools'));
