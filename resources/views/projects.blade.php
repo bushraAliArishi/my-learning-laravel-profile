@@ -1,157 +1,155 @@
 {{-- resources/views/projects.blade.php --}}
-@php
-  use App\Models\Project;
-  use Illuminate\Support\Str;
+<x-layout title="Projects">
+  <x-slot name="heading">My Projects</x-slot>
+<section class="py-6 mt-20">
+    <div class="container mx-auto px-6">
+      <form id="filters" method="get" class="grid gap-4 md:grid-cols-3 lg:grid-cols-5 items-end">
+        <div class="col-span-3">
+          <label class="block text-sm font-medium text-gray-700">Search</label>
+          <input
+            x-data
+            @input="$el.form.submit()"
+            type="text"
+            name="search"
+            value="{{ request('search') }}"
+            placeholder="Project title or description…"
+            class="mt-1 block w-full h-10 border rounded-md px-3"
+          >
+        </div>
 
-  // 1) جيب كل المشاريع مع العلاقات
-  $dbProjects = Project::with(['media','tags','tools'])->get();
+        <div x-data="multiSelect(@json($allTags->pluck('name','id')), @json(request('tags', [])))" @click.away="open=false">
+          <label class="block text-sm font-medium text-gray-700">Tags</label>
+          <div class="mt-1 relative">
+            <div class="p-2 border rounded-md flex flex-wrap gap-1 cursor-pointer" @click="open = true">
+              <template x-for="id in selected" :key="id">
+                <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full flex items-center">
+                  <span x-text="options[id]"></span>
+                  <button type="button" class="ml-1" @click.stop="remove(id)">×</button>
+                </span>
+              </template>
+              <input
+                x-model="query"
+                placeholder="Select tags…"
+                class="border-none flex-1 h-8 focus:ring-0 focus:outline-none text-sm"
+              >
+            </div>
+            <ul
+              x-show="open"
+              x-cloak
+              class="absolute bg-transparent border rounded-md mt-1 w-full max-h-48 overflow-auto z-20"
+            >
+              <template x-for="(name, id) in filtered" :key="id">
+                <li
+                  class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                  @click="choose(id)"
+                  x-text="name"
+                ></li>
+              </template>
+            </ul>
+          </div>
+          <template x-for="id in selected" :key="id">
+            <input type="hidden" name="tags[]" :value="id">
+          </template>
+        </div>
 
-  // 2) إذا الفهرس فاضي، رجع للمصفوفة الثابتة
-  if ($dbProjects->isEmpty()) {
-      $projects   = Project::allStatic();  // المصفوفة الثابتة
-      $useStatic  = true;
-  } else {
-      $projects  = $dbProjects;
-      $useStatic = false;
-  }
-@endphp
+        <div x-data="multiSelect(@json($allTools->pluck('name','id')), @json(request('tools', [])))" @click.away="open=false">
+          <label class="block text-sm font-medium text-gray-700">Tools</label>
+          <div class="mt-1 relative">
+            <div class="p-2 border rounded-md flex flex-wrap gap-1 cursor-pointer" @click="open = true">
+              <template x-for="id in selected" :key="id">
+                <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full flex items-center">
+                  <span x-text="options[id]"></span>
+                  <button type="button" class="ml-1" @click.stop="remove(id)">×</button>
+                </span>
+              </template>
+              <input
+                x-model="query"
+                placeholder="Select tools…"
+                class="border-none flex-1 h-8 focus:ring-0 focus:outline-none text-sm"
+              >
+            </div>
+            <ul
+              x-show="open"
+              x-cloak
+              class="absolute bg-transparent border rounded-md mt-1 w-full max-h-48 overflow-auto z-20"
+            >
+              <template x-for="(name, id) in filtered" :key="id">
+                <li
+                  class="px-3 py-2 hover:bg-gray-100 cursor-pointer text-sm"
+                  @click="choose(id)"
+                  x-text="name"
+                ></li>
+              </template>
+            </ul>
+          </div>
+          <template x-for="id in selected" :key="id">
+            <input type="hidden" name="tools[]" :value="id">
+          </template>
+        </div>
+      </form>
+    </div>
+  </section>
 
-<x-layout :title="$title">
-  <x-slot name="heading">{{ $heading }}</x-slot>
-
-  <section class="pt-28 pb-16 bg-gray-50">
+  <section class="pb-16 bg-gray-50">
     <div class="container mx-auto px-6 max-w-6xl">
       <div class="grid gap-12 md:grid-cols-2 lg:grid-cols-3">
-
         @foreach($projects as $project)
-          <div class="group bg-gradient-to-b from-gray-200 via-white to-white rounded-2xl shadow-lg overflow-hidden flex flex-col hover:shadow-2xl transition">
-
-            {{-- Banner --}}
-            <div class="p-6 flex items-center justify-center h-48 overflow-hidden">
-              @if($useStatic)
-                <img 
-                  src="{{ $project['image'] }}"
-                  alt="{{ $project['title'] }}"
-                  class="w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                >
-              @else
-                @if($project->media->isNotEmpty())
-                  <img 
-                    src="{{ asset($project->media->first()->media_url) }}"
-                    alt="{{ $project->title }}"
-                    class="w-full max-h-full object-contain group-hover:scale-105 transition-transform duration-300"
-                  >
-                @else
-                  <img 
-                    src="{{ asset('images/logos/default-banner.png') }}"
-                    alt="{{ $project->title }}"
-                    class="w-full max-h-full object-contain"
-                  >
-                @endif
-              @endif
-            </div>
-
-            <div class="p-6 flex-1 flex flex-col">
-
-              {{-- Host logo --}}
-              <div class="flex justify-end mb-4">
-                <div class="bg-gray-100 p-1.5 rounded-full inline-flex items-center justify-center shadow-sm border border-gray-300">
-                  @if($useStatic)
-                    <img 
-                      src="{{ asset('images/logos/' . Project::hostLogo($project['link'])) }}"
-                      alt="Host logo"
-                      class="w-6 h-6 object-contain"
-                    >
-                  @else
-                    <img 
-                      src="{{ asset('images/logos/' . Project::hostLogo($project->link)) }}"
-                      alt="Host logo"
-                      class="w-6 h-6 object-contain"
-                    >
-                  @endif
-                </div>
-              </div>
-
-              {{-- Title & Type --}}
-              <div class="flex items-center justify-between mb-3">
-                <h3 class="text-xl font-semibold leading-snug">
-                  {{ $useStatic ? $project['title'] : $project->title }}
-                </h3>
-                <span class="px-3 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded-full">
-                  {{ $useStatic ? $project['type'] : $project->type }}
-                </span>
-              </div>
-
-              {{-- Description --}}
-              <p class="text-gray-600 flex-1 mb-6">
-                {{ $useStatic ? $project['description'] : $project->description }}
-              </p>
-
-              {{-- Tech / Tools --}}
-              <div class="flex flex-wrap gap-4 mb-6">
-                @if($useStatic)
-                  @foreach($project['tech'] as $tech)
-                    <img
-                      src="{{ asset('images/logos/' . Project::techIcon($tech)) }}"
-                      alt="{{ $tech }} logo"
-                      title="{{ $tech }}"
-                      class="w-10 h-10 object-contain"
-                    >
-                  @endforeach
-                @else
-                  @foreach($project->tools as $tool)
-                    <img
-                      src="{{ asset($tool->logo) }}"
-                      alt="{{ $tool->name }} logo"
-                      title="{{ $tool->name }}"
-                      class="w-10 h-10 object-contain"
-                    >
-                  @endforeach
-                @endif
-              </div>
-
-              {{-- Tags --}}
-              <div class="flex flex-wrap gap-2 mb-6">
-                @if($useStatic)
-                  @foreach($project['tags'] as $tag)
-                    @php
-                      $base = $tag['color_hex'];
-                      $bg   = Str::of($base)->replace('#','')->prepend('#')->__toString() . '33';
-                    @endphp
-                    <span
-                      class="px-3 py-1 rounded-full text-xs font-medium"
-                      style="background-color: {{ $bg }}; color: {{ $base }};">
-                      {{ $tag['name'] }}
-                    </span>
-                  @endforeach
-                @else
-                  @foreach($project->tags as $tag)
-                    @php
-                      $base = $tag->color_hex;
-                      $bg   = $base . '33';
-                    @endphp
-                    <span
-                      class="px-3 py-1 rounded-full text-xs font-medium"
-                      style="background-color: {{ $bg }}; color: {{ $base }};">
-                      {{ $tag->name }}
-                    </span>
-                  @endforeach
-                @endif
-              </div>
-
-              {{-- View button --}}
-              <a
-                href="{{ $useStatic ? $project['link'] : $project->link }}"
-                target="_blank"
-                class="mt-auto inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg text-center"
+          <div class="group bg-white rounded-2xl shadow hover:shadow-lg overflow-hidden flex flex-col">
+            <div class="p-6 flex justify-center">
+              <img
+                src="{{ asset('images/logos/' . \App\Models\Project::hostLogo($project->link)) }}"
+                alt="Host logo"
+                class="w-16 h-16 object-contain"
               >
-                View Project →
+            </div>
+            <div class="px-6 pb-6 flex-1 flex flex-col">
+              <h3 class="text-lg font-semibold mb-2">{{ $project->title }}</h3>
+              <p class="text-gray-600 flex-1">{{ \Illuminate\Support\Str::limit($project->description, 100) }}</p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                @foreach($project->tags as $tag)
+                  <span
+                    class="text-xs font-medium px-2 py-1 rounded"
+                    style="background-color: {{ $tag->color_hex }}33; color: {{ $tag->color_hex }};"
+                  >{{ $tag->name }}</span>
+                @endforeach
+              </div>
+              <a href="{{ $project->link }}" target="_blank" class="mt-4 inline-block text-blue-600 hover:underline">
+                View →
               </a>
             </div>
           </div>
         @endforeach
-
       </div>
+      <div class="mt-8">{{ $projects->links() }}</div>
     </div>
   </section>
+
+  <script>
+    function multiSelect(options, initial = []) {
+      return {
+        options,
+        selected: initial,
+        open: false,
+        query: '',
+        get filtered() {
+          return Object.entries(this.options)
+            .filter(([id, name]) =>
+              name.toLowerCase().includes(this.query.toLowerCase()) &&
+              !this.selected.includes(Number(id))
+            )
+            .reduce((obj, [id, name]) => (obj[id] = name, obj), {});
+        },
+        choose(id) {
+          this.selected.push(Number(id));
+          this.open = false;
+          this.query = '';
+          document.getElementById('filters').submit();
+        },
+        remove(id) {
+          this.selected = this.selected.filter(i => i !== id);
+          document.getElementById('filters').submit();
+        }
+      }
+    }
+  </script>
 </x-layout>

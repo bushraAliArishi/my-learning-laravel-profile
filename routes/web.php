@@ -1,9 +1,19 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Arr;
+use App\Models\Tool;
+use App\Models\Tag;
+use App\Models\ExperienceSkill;
+use App\Models\ExperienceAchievement;
+use App\Models\ProjectMedia;
 use App\Models\Experience;
 use App\Models\Project;
+use Illuminate\Http\Request;
+use App\Models\ProjectMedia as Media;
+use App\Models\ProjectTool as ToolPivot;
+use App\Models\ProjectTag as TagPivot;
+use App\Models\ProjectTool;
+
 
 Route::get('/', function () {
     return view('home', [
@@ -31,33 +41,57 @@ Route::get('/contact', function () {
         'title'   => 'Contact Us',
         'heading' => 'Get in Touch',
     ]);
-});// /projects — قائمة المشاريع
-Route::get('/projects', function () {
-    // eager-load للعلاقات media, tags, tools اللي سويناها في Seeder والموديل
-    $projects = Project::with(['media', 'tags', 'tools'])->get();
-
-    return view('projects', [
-        'title'    => 'Projects',
-        'heading'  => 'My Projects',
-        'projects' => $projects,
-    ]);
 });
 
-// قائمة الخبرات
+
+Route::get('/projects', function (Request $request) {
+    $allTags  = Tag::orderBy('name')->get();
+    $allTools = Tool::orderBy('name')->get();
+
+    $query = Project::with(['media','tags','tools']);
+
+    if ($search = $request->input('search')) {
+        $query->where(function($q) use($search) {
+            $q->where('title', 'like', "%{$search}%")
+              ->orWhere('description', 'like', "%{$search}%");
+        });
+    }
+
+    if ($tags = $request->input('tags', [])) {
+        $query->whereHas('tags', function($q) use($tags) {
+            $q->whereIn('tags.id', $tags);
+        });
+    }
+
+    if ($tools = $request->input('tools', [])) {
+        $query->whereHas('tools', function($q) use($tools) {
+            $q->whereIn('tools.id', $tools);
+        });
+    }
+
+    $projects = $query->orderBy('created_at','desc')
+                      ->paginate(9)
+                      ->withQueryString();
+
+    return view('projects', compact('projects','allTags','allTools'));
+});
+
+
 Route::get('/experience', function () {
-    // eager-load للعلاقات skills, achievements, tools
+
     $experiences = Experience::with(['skills', 'achievements', 'tools'])
-                             ->orderBy('start_date', 'desc')  // اذا عندك هذا الحقل
+                             ->orderBy('start_date', 'desc')
                              ->get();
 
     return view('experience.index', [
         'title'       => 'All Experience',
         'heading'     => 'Learn More About Me',
-        'experiences' => $experiences,      // ← نقول experiences
+        'experiences' => $experiences,     
+        
     ]);
 });
 
-// تفاصيل خبرة واحدة
+
 Route::get('/experience/{slug}', function (string $slug) {
     $exp = Experience::with(['skills', 'achievements', 'tools'])
                      ->where('slug', $slug)
@@ -66,6 +100,7 @@ Route::get('/experience/{slug}', function (string $slug) {
     return view('experience.show', [
         'title'   => $exp->title,
         'heading' => "{$exp->company} • {$exp->period}",
-        'exp'     => $exp,                   // ← نناديه exp
+        'exp'     => $exp,                
+
     ]);
 });
