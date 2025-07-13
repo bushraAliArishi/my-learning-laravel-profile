@@ -2,7 +2,6 @@
 
 namespace Database\Factories;
 
-use App\Models\Experience;
 use App\Models\ExperienceSkill;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,11 +9,10 @@ class ExperienceSkillFactory extends Factory
 {
     protected $model = ExperienceSkill::class;
 
-    public function definition()
+    public function definition(): array
     {
         return [
-            'experience_id' => Experience::factory(),
-            'skill_name'    => $this->faker->sentence(3),
+            'skill_name' => $this->faker->words(3, true),
         ];
     }
 }

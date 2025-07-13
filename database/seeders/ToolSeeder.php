@@ -1,5 +1,4 @@
 <?php
-// database/seeders/ToolSeeder.php
 
 namespace Database\Seeders;
 
@@ -32,7 +31,10 @@ class ToolSeeder extends Seeder
         ];
 
         foreach ($tools as $t) {
-            Tool::updateOrCreate(['name'=>$t['name']], ['logo'=>$t['logo']]);
+            Tool::updateOrCreate(
+                ['name' => $t['name']],
+                ['logo' => $t['logo']]
+            );
         }
     }
 }

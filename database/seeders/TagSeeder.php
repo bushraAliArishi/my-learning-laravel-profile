@@ -1,5 +1,4 @@
 <?php
-// database/seeders/TagSeeder.php
 
 namespace Database\Seeders;
 

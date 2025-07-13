@@ -1,35 +1,31 @@
 <?php
-// database/seeders/DatabaseSeeder.php
 
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Str;
+use App\Models\User;
 
 class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1) Static reference data
-        $this->call([
-            TagSeeder::class,
-            ToolSeeder::class,
-            ExperienceSeeder::class,
-            ExperienceSkillsTableSeeder::class,
-            ExperienceAchievementsTableSeeder::class,
-            ExperienceToolTableSeeder::class,
-            ProjectSeeder::class,
-            ProjectMediaTableSeeder::class,
-            ProjectToolTableSeeder::class,
-        ]);
+       $this->call([
+        TagSeeder::class,
+        ToolSeeder::class,
+    ]);
 
-        // 2) Bulk factories
-        $this->call([
-            FactorySeeder::class,
-        ]);
 
-        // 3) Test user
-        \App\Models\User::updateOrCreate(
+    $this->call([
+        ProjectSeeder::class,
+        ExperienceSeeder::class,
+    ]);
+
+    $this->call([
+        FactorySeeder::class,
+    ]);
+
+         User::updateOrCreate(
             ['email' => 'test@example.com'],
             [
                 'first_name'     => 'Test',
