@@ -1,3 +1,4 @@
+{{-- resources/views/projects/create.blade.php --}}
 <x-layout title="Create Project">
   <x-slot name="heading">Add New Project</x-slot>
 
@@ -5,20 +6,26 @@
     x-data="{
       title: '{{ old('title') }}',
       link: '{{ old('link') }}',
-      description: '{{ old('description') }}',
+      description: `{{ old('description') }}`,
+      type: '{{ old('type') }}',
+      new_type: '{{ old('new_type') }}',
       tags: {{ json_encode(old('tags', [])) }},
       tools: {{ json_encode(old('tools', [])) }},
       dropdownTags: false,
       dropdownTools: false,
       showTagForm: false,
       showToolForm: false,
+
       resetForm() {
         this.title = '';
         this.link = '';
         this.description = '';
+        this.type = '';
+        this.new_type = '';
         this.tags = [];
         this.tools = [];
       },
+
       toggle(arr,id) {
         id = +id;
         const i = arr.indexOf(id);
@@ -34,59 +41,89 @@
   >
     @csrf
 
+    {{-- Project Details --}}
     <div class="border-b border-gray-900/10 pb-12 space-y-6">
       <h2 class="text-base/7 font-semibold text-gray-900">Project Details</h2>
       <p class="text-sm/6 text-gray-600">This information will be public.</p>
 
       <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+        {{-- Title --}}
         <div class="sm:col-span-3">
           <label for="title" class="block text-sm/6 font-medium text-gray-900">Title</label>
-          <div class="mt-2">
-            <input
-              x-model="title"
-              type="text" name="title" id="title" required
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
-                     outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm/6"
-            >
-          </div>
+          <input
+            x-model="title"
+            type="text" name="title" id="title" required
+            class="mt-2 block w-full rounded-md border-gray-300 px-3 py-1.5 focus:outline-indigo-600"
+          />
         </div>
 
+        {{-- Link --}}
         <div class="sm:col-span-3">
           <label for="link" class="block text-sm/6 font-medium text-gray-900">Link</label>
-          <div class="mt-2">
-            <input
-              x-model="link"
-              type="url" name="link" id="link" required
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
-                     outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm/6"
-            >
-          </div>
+          <input
+            x-model="link"
+            type="url" name="link" id="link"
+            class="mt-2 block w-full rounded-md border-gray-300 px-3 py-1.5 focus:outline-indigo-600"
+          />
         </div>
 
+        {{-- Description --}}
         <div class="sm:col-span-full">
           <label for="description" class="block text-sm/6 font-medium text-gray-900">Description</label>
-          <div class="mt-2">
-            <textarea
-              x-model="description"
-              name="description" id="description" rows="3" required
-              class="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900
-                     outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:outline-indigo-600 sm:text-sm/6"
-            ></textarea>
-          </div>
+          <textarea
+            x-model="description"
+            name="description" id="description" rows="3" required
+            class="mt-2 block w-full rounded-md border-gray-300 px-3 py-1.5 focus:outline-indigo-600"
+          ></textarea>
         </div>
+
+        {{-- Type --}}
+        <div class="sm:col-span-3">
+          <label for="type" class="block text-sm/6 font-medium text-gray-900">Type</label>
+          <select
+            x-model="type"
+            name="type" id="type"
+            class="mt-2 block w-full rounded-md border-gray-300 px-3 py-1.5 focus:outline-indigo-600"
+          >
+            <option value="">Select type…</option>
+            @foreach($allTypes as $t)
+              <option value="{{ $t }}">{{ $t }}</option>
+            @endforeach
+            <option value="other">Other…</option>
+          </select>
+        </div>
+
+        {{-- New Type when “Other” --}}
+        <template x-if="type === 'other'">
+          <div class="sm:col-span-3">
+            <label for="new_type" class="block text-sm/6 font-medium text-gray-900">New Type</label>
+            <input
+              x-model="new_type"
+              type="text" name="new_type" id="new_type"
+              class="mt-2 block w-full rounded-md border-gray-300 px-3 py-1.5 focus:outline-indigo-600"
+            />
+          </div>
+        </template>
       </div>
     </div>
 
-    <div class="border-b border-gray-900/10 pb-12 space-y-12 mt-40">
+    {{-- Tags & Tools --}}
+    <div class="border-b border-gray-900/10 pb-12 space-y-12">
       <h2 class="text-base/7 font-semibold text-gray-900 mb-4">Tags & Tools</h2>
 
       <div class="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        {{-- Tags --}}
         <div class="space-y-4">
           <div class="flex justify-between items-center">
             <label class="block text-sm/6 font-medium text-gray-900">Select Tags</label>
-            <button type="button" @click="showTagForm = !showTagForm" class="text-sm/6 font-medium text-blue-600 hover:underline">+ Add Tag</button>
+            <button
+              type="button"
+              @click="showTagForm = !showTagForm"
+              class="text-sm/6 font-medium text-blue-600 hover:underline"
+            >+ Add Tag</button>
           </div>
 
+          {{-- Selected Chips --}}
           <div
             @click="dropdownTags = !dropdownTags"
             class="flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 cursor-pointer"
@@ -107,10 +144,10 @@
             </svg>
           </div>
 
+          {{-- Dropdown List --}}
           <div
             x-show="dropdownTags"
-            x-cloak
-            x-transition
+            x-cloak x-transition
             class="bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto z-50"
           >
             <template x-for="tag in $store.tags" :key="tag.id">
@@ -124,32 +161,50 @@
               </div>
             </template>
           </div>
-          <template x-for="id in tags" :key="id"><input type="hidden" name="tags[]" :value="id"></template>
+          <template x-for="id in tags" :key="id">
+            <input type="hidden" name="tags[]" :value="id" />
+          </template>
 
-          <div x-show="showTagForm" x-transition class="p-6 bg-blue-50 rounded-md shadow-inner mt-4">
+          {{-- Inline “New Tag” Form --}}
+          <div
+            x-show="showTagForm"
+            x-cloak x-transition
+            class="p-6 bg-blue-50 rounded-md shadow-inner mt-4"
+          >
             <h3 class="text-sm/6 font-semibold text-gray-900 mb-4">New Tag</h3>
             <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-3">
               <div>
                 <label class="block text-sm/6 font-medium text-gray-900">Name</label>
-                <input name="new_tag_name" type="text" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-1.5">
+                <input name="new_tag_name" type="text" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-1.5" />
               </div>
               <div>
                 <label class="block text-sm/6 font-medium text-gray-900">Color</label>
-                <input name="new_tag_color" type="color" value="#000000" class="mt-1 block w-full h-10 p-0 border-none">
+                <input name="new_tag_color" type="color" value="#000000" class="mt-1 block w-full h-10 p-0 border-none" />
               </div>
               <div class="flex items-end">
-                <button type="submit" formaction="{{ route('tags.store') }}" formmethod="POST" class="px-4 py-2 bg-blue-600 text-white rounded-md">Save Tag</button>
+                <button
+                  type="submit"
+                  formaction="{{ route('tags.store') }}"
+                  formmethod="POST"
+                  class="px-4 py-2 bg-blue-600 text-white rounded-md"
+                >Save Tag</button>
               </div>
             </div>
           </div>
         </div>
 
+        {{-- Tools --}}
         <div class="space-y-4">
           <div class="flex justify-between items-center">
             <label class="block text-sm/6 font-medium text-gray-900">Select Tools</label>
-            <button type="button" @click="showToolForm = !showToolForm" class="text-sm/6 font-medium text-purple-600 hover:underline">+ Add Tool</button>
+            <button
+              type="button"
+              @click="showToolForm = !showToolForm"
+              class="text-sm/6 font-medium text-purple-600 hover:underline"
+            >+ Add Tool</button>
           </div>
 
+          {{-- Selected Chips --}}
           <div
             @click="dropdownTools = !dropdownTools"
             class="flex items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 cursor-pointer"
@@ -171,10 +226,10 @@
             </svg>
           </div>
 
+          {{-- Dropdown List --}}
           <div
             x-show="dropdownTools"
-            x-cloak
-            x-transition
+            x-cloak x-transition
             class="bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto z-50"
           >
             <template x-for="tool in $store.tools" :key="tool.id">
@@ -189,21 +244,33 @@
               </div>
             </template>
           </div>
-          <template x-for="id in tools" :key="id"><input type="hidden" name="tools[]" :value="id"></template>
+          <template x-for="id in tools" :key="id">
+            <input type="hidden" name="tools[]" :value="id" />
+          </template>
 
-          <div x-show="showToolForm" x-transition class="p-6 bg-purple-50 rounded-md shadow-inner mt-4">
+          {{-- Inline “New Tool” Form --}}
+          <div
+            x-show="showToolForm"
+            x-cloak x-transition
+            class="p-6 bg-purple-50 rounded-md shadow-inner mt-4"
+          >
             <h3 class="text-sm/6 font-semibold text-gray-900 mb-4">New Tool</h3>
             <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-4">
               <div class="sm:col-span-2">
                 <label class="block text-sm/6 font-medium text-gray-900">Name</label>
-                <input name="new_tool_name" type="text" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-1.5">
+                <input name="new_tool_name" type="text" class="mt-1 block w-full rounded-md border-gray-300 px-3 py-1.5" />
               </div>
               <div class="sm:col-span-2">
                 <label class="block text-sm/6 font-medium text-gray-900">Logo</label>
-                <input name="new_tool_logo" type="file" accept="image/*" class="mt-1 block w-full text-sm border border-gray-300 rounded-md p-1.5 bg-white">
+                <input name="new_tool_logo" type="file" accept="image/*" class="mt-1 block w-full rounded-md border-gray-300 p-1.5" />
               </div>
               <div class="sm:col-span-4 flex justify-end">
-                <button type="submit" formaction="{{ route('tools.store') }}" formmethod="POST" class="px-4 py-2 bg-purple-600 text-white rounded-md">Save Tool</button>
+                <button
+                  type="submit"
+                  formaction="{{ route('tools.store') }}"
+                  formmethod="POST"
+                  class="px-4 py-2 bg-purple-600 text-white rounded-md"
+                >Save Tool</button>
               </div>
             </div>
           </div>
@@ -211,17 +278,23 @@
       </div>
     </div>
 
+    {{-- Actions --}}
     <div class="flex justify-center gap-x-6 mt-24 mb-24">
-      <button type="button" @click="resetForm()" class="px-6 py-3 rounded-md bg-red-600 text-white text-base font-semibold">Reset</button>
-      <button type="submit" class="px-6 py-3 rounded-md bg-indigo-600 text-white text-base font-semibold">Save</button>
+      <button
+        type="button"
+        @click="resetForm()"
+        class="px-6 py-3 rounded-md bg-red-600 text-white font-semibold"
+      >Reset</button>
+      <button
+        type="submit"
+        class="px-6 py-3 rounded-md bg-indigo-600 text-white font-semibold"
+      >Save</button>
     </div>
   </form>
-<div class="min-h-300">
-    
-</div>
+
   <script>
     document.addEventListener('alpine:init', () => {
-      Alpine.store('tags', @json($allTags));
+      Alpine.store('tags',  @json($allTags));
       Alpine.store('tools', @json($allTools));
     });
   </script>

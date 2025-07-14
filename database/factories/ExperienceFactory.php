@@ -12,21 +12,29 @@ class ExperienceFactory extends Factory
 
     public function definition(): array
     {
-        $title = $this->faker->jobTitle();
+        $title     = $this->faker->jobTitle();
+        $startDate = $this->faker->dateTimeBetween('-5 years', 'now');
+        $endDate   = $this->faker->dateTimeBetween($startDate, 'now');
+
         return [
-            'slug'    => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1, 1000),
-            'title'   => $title,
-            'company' => $this->faker->company(),
-            'period'  => $this->faker->date('M Y') . ' – ' . $this->faker->date('M Y'),
-            'details' => $this->faker->paragraph(),
+            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1, 1000),
+            'title'       => $title,
+            'company'     => $this->faker->company(),
+            'period'      => $startDate->format('M Y') . ' – ' . $endDate->format('M Y'),
+            'details'     => $this->faker->paragraph(),
+            'start_date'  => $startDate->format('Y-m-d'),
+            'end_date'    => $endDate->format('Y-m-d'),
         ];
     }
 
-    public function withRelations(int $skills = 3, int $achievements = 2, int $tools = 4)
+    /**
+     * Attach related skills, achievements, and tools.
+     */
+    public function withRelations(int $skillsCount = 3, int $achievementsCount = 2, int $toolsCount = 4)
     {
         return $this
-            ->has(ExperienceSkillFactory::new()->count($skills), 'skills')
-            ->has(ExperienceAchievementFactory::new()->count($achievements), 'achievements')
-            ->hasAttached(ToolFactory::new()->count($tools), 'tools');
+            ->has(\App\Models\ExperienceSkill::factory()->count($skillsCount), 'skills')
+            ->has(\App\Models\ExperienceAchievement::factory()->count($achievementsCount), 'achievements')
+            ->hasAttached(\App\Models\Tool::factory()->count($toolsCount), 'tools');
     }
 }

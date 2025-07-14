@@ -1,3 +1,4 @@
+{{-- resources/views/experience/show.blade.php --}}
 <x-layout :title="$title">
   <x-slot name="heading">{{ $heading }}</x-slot>
 
@@ -7,7 +8,14 @@
       {{-- Title & Period --}}
       <div class="space-y-2 text-center">
         <h2 class="text-3xl font-bold">{{ $exp->title }}</h2>
-        <p class="text-sm text-gray-500">{{ $exp->company }} &bull; {{ $exp->period }}</p>
+        <p class="text-sm text-gray-500">
+          {{ $exp->company }} &bull;
+          {{ \Carbon\Carbon::parse($exp->start_date)->format('M Y') }}
+          &ndash;
+          {{ $exp->end_date
+              ? \Carbon\Carbon::parse($exp->end_date)->format('M Y')
+              : 'Present' }}
+        </p>
       </div>
 
       {{-- Details --}}
@@ -45,6 +53,7 @@
                 src="{{ asset($tool->logo) }}"
                 alt="{{ $tool->name }} logo"
                 class="w-16 h-16 object-contain mb-2"
+                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';"
               >
               <span class="text-xs text-gray-600 text-center">{{ $tool->name }}</span>
             </div>
@@ -54,7 +63,8 @@
 
       {{-- Back Link --}}
       <div class="text-center">
-        <a href="{{ url('/experience') }}" class="text-blue-600 hover:underline font-medium">
+        <a href="{{ route('experience.index') }}"
+           class="text-blue-600 hover:underline font-medium">
           &larr; Back to all experiences
         </a>
       </div>

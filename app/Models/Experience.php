@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← أضفّي هذا
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Experience extends Model
 {
-    use HasFactory;  // ← وأضفّي هذا
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.
@@ -50,6 +50,6 @@ class Experience extends Model
             'experience_tool',
             'experience_id',
             'tool_id'
-        );
+        )->withTimestamps();
     }
 }

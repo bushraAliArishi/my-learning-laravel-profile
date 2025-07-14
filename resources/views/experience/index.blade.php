@@ -8,24 +8,20 @@
       <div class="relative max-w-2xl mx-auto">
         <div class="absolute top-0 bottom-0 left-1/2 transform -translate-x-1 w-1 bg-gray-300 rounded"></div>
 
-        {{-- نستخدم هنا المتغيّر experiences بدل experience --}}
         @foreach($experiences as $exp)
           <div class="relative mb-16 flex items-start">
             <div class="w-full bg-white rounded-lg shadow-lg p-6  
-                        @if($loop->iteration % 2 === 0)  
-                          ml-50   {{-- بطاقات زوجية يمين الخط --}}
-                        @else  
-                          mr-50   {{-- بطاقات فردية يسار الخط --}}
-                        @endif">
+                        @if($loop->iteration % 2 === 0) ml-50 @else mr-50 @endif">
+              
+              {{-- Header: title, company, arrow --}}
               <div class="flex justify-between items-start">
                 <div>
-                  {{-- نستعمل object syntax --}}
                   <h3 class="text-2xl font-semibold mb-1">{{ $exp->title }}</h3>
                   <p class="text-sm text-gray-500 mb-2">
                     {{ $exp->company }} &bull; {{ $exp->period }}
                   </p>
                 </div>
-                <a href="{{ url('/experience/'.$exp->slug) }}"
+                <a href="{{ route('experience.show', $exp->slug) }}"
                    class="text-gray-400 hover:text-blue-600 transition transform hover:translate-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg"
                        class="w-6 h-6"
@@ -37,10 +33,22 @@
                 </a>
               </div>
 
-              {{-- تفاصيل (details) لوثيقة واحدة، ممكن تعرضينها هنا --}}
+              {{-- Details --}}
               <ul class="list-disc pl-5 text-gray-700 mt-4 space-y-1">
                 <li>{{ $exp->details }}</li>
               </ul>
+
+              {{-- Actions: View & Edit --}}
+              <div class="mt-6 flex gap-4">
+                <a href="{{ route('experience.show', $exp->slug) }}"
+                   class="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+                  View
+                </a>
+                <a href="{{ route('experience.edit', $exp->slug) }}"
+                   class="inline-block px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg">
+                  Edit
+                </a>
+              </div>
             </div>
           </div>
         @endforeach

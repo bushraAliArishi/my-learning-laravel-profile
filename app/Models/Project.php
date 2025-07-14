@@ -13,12 +13,44 @@ use App\Models\ProjectMedia;
 class Project extends Model
 {
     use HasFactory;
+/**
+ * The attributes that are mass assignable.
+ *
+ * In Laravel’s Eloquent, you control which model properties can be set via
+ * “mass assignment” (e.g. Model::create($array) or Model::fill($array))
+ * by using either the $fillable or $guarded property.
+ *
+ * protected $fillable = ['col1', 'col2', …];
+ *     • A “white‐list” approach.
+ *     • Only the columns listed here may be bulk‐assigned.
+ *     • Any key in the input array not in $fillable will be ignored.
+ *     • Use when you want tight, explicit control over which fields
+ *       can be set by external input.
+ *
+ * protected $fillable;
+ *     • Declares the property but leaves it uninitialized (null).
+ *     • Behaves as if no attributes have been marked as fillable.
+ *     • In practice, avoid leaving it unset—either define it or remove it.
+ *
+ * protected $guarded = [];
+ *     • A “black‐list” approach.
+ *     • By setting $guarded to an empty array, **all** columns are mass‐assignable.
+ *     • Use with caution: you’re trusting that validation elsewhere
+ *       prevents unwanted input.
+ *
+ * protected $guarded;
+ *     • Declares the property but leaves it uninitialized (null).
+ *     • Behaves as if **every** column is guarded, so **none** can be
+ *       mass‐assigned—unless you explicitly set $fillable instead.
+ *     • Rarely used; better to either define your guard list or remove it.
+ *
+ * —— Choosing between $fillable and $guarded ——  
+ * • Pick **one** strategy per model.  
+ * • Default recommendation: use $fillable with explicit fields.  
+ * • Only use $guarded = [] if you truly want to allow mass‐assignment
+ *   of every column and have other safeguards in place.  
+ */
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
     protected $fillable = [
         'slug',
         'title',
