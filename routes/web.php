@@ -14,7 +14,11 @@ use App\Models\Experience;
 |--------------------------------------------------------------------------
 |
 | Everything lives here as simple route‐closures—no controllers needed yet.
-|
+|valiclate
+authorize (On hold ... )
+update the job
+and persist
+redirect to the job page
 */
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -195,7 +199,6 @@ Route::put('/projects/{slug}', function (Request $r, string $slug) {
         'tools.*'     => 'exists:tools,id',
         'media.*'     => 'nullable|image|max:2048',
     ]);
-
     if (($data['type'] ?? '') === 'other' && $data['new_type']) {
         $data['type'] = $data['new_type'];
     }
@@ -225,6 +228,13 @@ Route::put('/projects/{slug}', function (Request $r, string $slug) {
     return redirect()->route('projects.index');
 })->name('projects.update');
 
+Route::delete('/projects/{slug}', function (Request $r, string $slug) {
+    $proj = Project::where('slug',$slug)->firstOrFail();
+    $proj->delete();
+
+    return redirect()->route('projects.index');
+})->name('projects.destroy');
+  
 // 6) Show a single project
 Route::get('/projects/{slug}', function (string $slug) {
     $project = Project::with(['media','tags','tools'])
@@ -309,7 +319,15 @@ Route::get('/experience/{slug}/edit', function (string $slug) {
     ]);
 })->name('experience.edit');
 
-// 5) Handle experience update
+
+Route::delete('/experience/{slug}', function (Request $r, string $slug) {
+    $exp = Experience::where('slug',$slug)->firstOrFail();
+    $exp->delete();
+
+    return redirect()->route('experience.index');
+})->name('experience.destroy');
+
+
 Route::put('/experience/{slug}', function (Request $r, string $slug) {
     $exp = Experience::where('slug',$slug)->firstOrFail();
 
