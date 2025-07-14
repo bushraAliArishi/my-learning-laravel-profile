@@ -66,7 +66,6 @@ Route::get('/projects', function (Request $request) {
 Route::get('/projects/create', function () {
     $allTags  = Tag::orderBy('name')->get();
     $allTools = Tool::orderBy('name')->get();
-
     return view('projects.create', compact('allTags','allTools'));
 })->name('projects.create');
 
