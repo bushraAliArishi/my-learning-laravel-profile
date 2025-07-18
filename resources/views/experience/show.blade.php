@@ -23,7 +23,7 @@
         <p>{{ $exp->details }}</p>
       </div>
 
-      {{-- Skills Section --}}
+      {{-- Skills --}}
       <div>
         <h3 class="text-xl font-semibold mb-4">Skills Acquired</h3>
         <ul class="list-disc pl-6 space-y-2">
@@ -61,12 +61,29 @@
         </div>
       </div>
 
-      {{-- Back Link --}}
-      <div class="text-center">
+      {{-- Actions: Back / Edit / Delete --}}
+      <div class="flex justify-center gap-x-6 mt-12">
         <a href="{{ route('experience.index') }}"
-           class="text-blue-600 hover:underline font-medium">
-          &larr; Back to all experiences
+           class="px-6 py-3 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 font-medium">
+          &larr; Back
         </a>
+
+        <a href="{{ route('experience.edit', $exp->id) }}"
+           class="px-6 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 font-medium">
+          Edit
+        </a>
+
+        <form method="POST"
+              action="{{ route('experience.destroy', $exp->id) }}"
+              onsubmit="return confirm('Delete this entry?');"
+        >
+          @csrf
+          @method('DELETE')
+          <button type="submit"
+                  class="px-6 py-3 rounded-md bg-red-600 text-white hover:bg-red-700 font-medium">
+            Delete
+          </button>
+        </form>
       </div>
 
     </div>

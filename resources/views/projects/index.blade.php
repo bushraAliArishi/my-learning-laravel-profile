@@ -25,8 +25,7 @@
       },
     }"
     @click.away="dropdownTags = false; dropdownTools = false"
-
-    >
+  >
 
     {{-- Filters & Search --}}
     <section class="py-6 mb-8">
@@ -95,6 +94,7 @@
               Reset
             </button>
           </div>
+
         </div>
       </div>
     </section>
@@ -105,6 +105,7 @@
         <div class="grid gap-24 md:grid-cols-2 lg:grid-cols-3 items-stretch">
           @foreach($projects as $project)
             <div class="relative group h-full">
+
               {{-- circular banner --}}
               <div
                 class="absolute -top-5 left-1/2 transform -translate-x-1/2
@@ -135,6 +136,8 @@
                     {{ Str::limit($project->description, 100) }}
                   </p>
                 </div>
+
+                {{-- tools logos --}}
                 <div class="flex flex-wrap gap-4 mt-4 mb-4 mx-5 justify-center">
                   @foreach($project->tools as $tool)
                     <img
@@ -145,6 +148,8 @@
                     >
                   @endforeach
                 </div>
+
+                {{-- tags --}}
                 <div class="flex flex-wrap gap-2 mb-6 mx-10 justify-center">
                   @foreach($project->tags as $tag)
                     <span
@@ -155,12 +160,23 @@
                     </span>
                   @endforeach
                 </div>
-                <a href="{{ $project->link }}" target="_blank"
-                   class="text-white font-semibold w-full
-                          bg-gradient-to-br from-blue-500 to-purple-600 py-3 text-center"
-                >
-                  View Project →
-                </a>
+
+                {{-- Joined View/Edit buttons --}}
+                <div class="mt-4 w-full flex overflow-hidden rounded-b-2xl">
+                  {{-- View half --}}
+                  <a href="{{ $project->link }}" target="_blank" class="flex-1 block">
+                    <x-button
+                      variant="gradient"
+                      class="w-full rounded-none rounded-bl-2xl" >View Project</x-button>
+                  </a>
+                  {{-- Edit half --}}
+                  <a href="{{ route('projects.edit', $project->id) }}" class="flex-1 block -ml-px">
+                    <x-button
+                      variant="secondary"
+                      class="w-full rounded-none rounded-br-2xl tr-0" > Edit Project </x-button>
+                  </a>
+                </div>
+
               </div>
             </div>
           @endforeach
@@ -172,7 +188,7 @@
     </section>
   </div>
 
-  {{-- Initialize Alpine stores --}}
+  {{-- Alpine stores --}}
   <script>
     document.addEventListener('alpine:init', () => {
       Alpine.store('tags',  @json($allTags));

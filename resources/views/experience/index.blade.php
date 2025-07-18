@@ -1,3 +1,4 @@
+{{-- resources/views/experience/index.blade.php --}}
 <x-layout :title="$title">
   <x-slot name="heading">{{ $heading }}</x-slot>
 
@@ -11,7 +12,7 @@
         @foreach($experiences as $exp)
           <div class="relative mb-16 flex items-start">
             <div class="w-full bg-white rounded-lg shadow-lg p-6  
-                        @if($loop->iteration % 2 === 0) ml-50 @else mr-50 @endif">
+                        @if($loop->iteration % 2 === 0) ml-12 @else mr-12 @endif">
               
               {{-- Header: title, company, arrow --}}
               <div class="flex justify-between items-start">
@@ -21,7 +22,7 @@
                     {{ $exp->company }} &bull; {{ $exp->period }}
                   </p>
                 </div>
-                <a href="{{ route('experience.show', $exp->slug) }}"
+                <a href="{{ route('experience.show', $exp->id) }}"
                    class="text-gray-400 hover:text-blue-600 transition transform hover:translate-x-1">
                   <svg xmlns="http://www.w3.org/2000/svg"
                        class="w-6 h-6"
@@ -40,11 +41,11 @@
 
               {{-- Actions: View & Edit --}}
               <div class="mt-6 flex gap-4">
-                <a href="{{ route('experience.show', $exp->slug) }}"
+                <a href="{{ route('experience.show', $exp->id) }}"
                    class="inline-block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
                   View
                 </a>
-                <a href="{{ route('experience.edit', $exp->slug) }}"
+                <a href="{{ route('experience.edit', $exp->id) }}"
                    class="inline-block px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg">
                   Edit
                 </a>
