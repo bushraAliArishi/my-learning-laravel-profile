@@ -40,7 +40,7 @@ class ProjectController extends Controller
             ->withQueryString();
 
         return view('projects.index', compact('projects','allTags','allTools','allTypes'))
-               ->with(['title'=>'Projects','heading'=>'My Projects']);
+               ->with(['title'=>'All Projects','heading'=>'My Projects']);
     }
 
     public function create()

@@ -1,88 +1,81 @@
 {{-- resources/views/experience/show.blade.php --}}
-<x-layout :title="$title">
-  <x-slot name="heading">{{ $heading }}</x-slot>
+<x-layout title="View Experience">
+  <x-slot name="heading">Experience Details</x-slot>
 
-  <section class="pt-28 pb-16 bg-white text-gray-800">
+  <section class="pt-28 pb-16 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-200">
     <div class="container mx-auto px-6 max-w-3xl space-y-8">
 
-      {{-- Title & Period --}}
+      {{-- Header --}}
       <div class="space-y-2 text-center">
-        <h2 class="text-3xl font-bold">{{ $exp->title }}</h2>
-        <p class="text-sm text-gray-500">
-          {{ $exp->company }} &bull;
-          {{ \Carbon\Carbon::parse($exp->start_date)->format('M Y') }}
-          &ndash;
-          {{ $exp->end_date
-              ? \Carbon\Carbon::parse($exp->end_date)->format('M Y')
-              : 'Present' }}
+        <h2 class="text-3xl font-bold text-gray-900 dark:text-gray-100">{{ $exp->title }}</h2>
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          {{ $exp->company }} &bull; {{ $exp->period }}
         </p>
       </div>
 
       {{-- Details --}}
-      <div class="prose prose-lg mx-auto text-gray-700">
-        <p>{{ $exp->details }}</p>
+      <div class="prose prose-lg mx-auto text-gray-700 dark:text-gray-300">
+        {!! nl2br(e($exp->details)) !!}
       </div>
 
       {{-- Skills --}}
-      <div>
-        <h3 class="text-xl font-semibold mb-4">Skills Acquired</h3>
-        <ul class="list-disc pl-6 space-y-2">
-          @foreach($exp->skills as $skill)
-            <li>{{ $skill->skill_name }}</li>
-          @endforeach
-        </ul>
-      </div>
+      @if($exp->skills->count())
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Skills Acquired</h3>
+          <ul class="list-disc pl-6 space-y-1">
+            @foreach($exp->skills as $skill)
+              <li>{{ $skill->skill_name }}</li>
+            @endforeach
+          </ul>
+        </div>
+      @endif
 
       {{-- Achievements --}}
-      <div>
-        <h3 class="text-xl font-semibold mb-4">Key Achievements</h3>
-        <ul class="list-disc pl-6 space-y-2">
-          @foreach($exp->achievements as $achievement)
-            <li>{{ $achievement->description }}</li>
-          @endforeach
-        </ul>
-      </div>
-
-      {{-- Tools & Technologies --}}
-      <div>
-        <h3 class="text-xl font-semibold mb-4">Tools & Technologies</h3>
-        <div class="flex flex-wrap gap-6 justify-center">
-          @foreach($exp->tools as $tool)
-            <div class="flex flex-col items-center w-24">
-              <img
-                src="{{ asset($tool->logo) }}"
-                alt="{{ $tool->name }} logo"
-                class="w-16 h-16 object-contain mb-2"
-                onerror="this.src='https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png';"
-              >
-              <span class="text-xs text-gray-600 text-center">{{ $tool->name }}</span>
-            </div>
-          @endforeach
+      @if($exp->achievements->count())
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Key Achievements</h3>
+          <ul class="list-disc pl-6 space-y-1">
+            @foreach($exp->achievements as $ach)
+              <li>{{ $ach->description }}</li>
+            @endforeach
+          </ul>
         </div>
-      </div>
+      @endif
 
-      {{-- Actions: Back / Edit / Delete --}}
-      <div class="flex justify-center gap-x-6 mt-12">
-        <a href="{{ route('experience.index') }}"
-           class="px-6 py-3 rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 font-medium">
-          &larr; Back
+      {{-- Tools --}}
+      @if($exp->tools->count())
+        <div>
+          <h3 class="text-xl font-semibold mb-2">Tools & Technologies</h3>
+          <div class="flex flex-wrap gap-4">
+            @foreach($exp->tools as $tool)
+              <span
+                class="inline-flex items-center bg-indigo-100 dark:bg-indigo-600 text-indigo-800 dark:text-indigo-100 text-xs font-medium px-2 py-0.5 rounded-full"
+              >
+                <img
+                  class="w-6 h-6 mr-2 object-contain rounded"
+                  src="{{ asset($tool->logo) }}"
+                  onerror="this.src='/images/icon/NoImages.png';"
+                  alt="{{ $tool->name }} logo"
+                />
+                {{ $tool->name }}
+              </span>
+            @endforeach
+          </div>
+        </div>
+      @endif
+
+      {{-- Actions --}}
+      <div class="flex justify-center gap-6 mt-12">
+        <a href="{{ route('experience.index') }}">
+          <x-button variant="secondary">← Back</x-button>
         </a>
-
-        <a href="{{ route('experience.edit', $exp->id) }}"
-           class="px-6 py-3 rounded-md bg-blue-600 text-white hover:bg-blue-700 font-medium">
-          Edit
+        <a href="{{ route('experience.edit', $exp->id) }}">
+          <x-button variant="primary">Edit</x-button>
         </a>
-
-        <form method="POST"
-              action="{{ route('experience.destroy', $exp->id) }}"
-              onsubmit="return confirm('Delete this entry?');"
-        >
-          @csrf
-          @method('DELETE')
-          <button type="submit"
-                  class="px-6 py-3 rounded-md bg-red-600 text-white hover:bg-red-700 font-medium">
-            Delete
-          </button>
+        <form method="POST" action="{{ route('experience.destroy', $exp->id) }}"
+              onsubmit="return confirm('Delete this entry?');">
+          @csrf @method('DELETE')
+          <x-button variant="danger">Delete</x-button>
         </form>
       </div>
 

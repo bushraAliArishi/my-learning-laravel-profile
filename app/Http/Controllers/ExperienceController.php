@@ -11,12 +11,16 @@ class ExperienceController extends Controller
 {
     public function index()
     {
+        // Paginate instead of get() so links() works
         $experiences = Experience::with(['skills','achievements','tools'])
-                                 ->orderBy('start_date','desc')
-                                 ->get();
+                         ->orderBy('start_date', 'desc')
+                         ->paginate(10);
 
         return view('experience.index', compact('experiences'))
-               ->with(['title'=>'All Experience','heading'=>'Learn More About Me']);
+               ->with([
+                   'title'   => 'All Experience',
+                   'heading' => 'Learn More About Me',
+               ]);
     }
 
     public function create()
@@ -24,7 +28,10 @@ class ExperienceController extends Controller
         $allTools = Tool::orderBy('name')->get();
 
         return view('experience.create', compact('allTools'))
-               ->with(['title'=>'Add New Experience','heading'=>'Create an Experience Entry']);
+               ->with([
+                   'title'   => 'Add New Experience',
+                   'heading' => 'Create an Experience Entry',
+               ]);
     }
 
     public function store(Request $request)
@@ -32,7 +39,6 @@ class ExperienceController extends Controller
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'company'     => 'required|string|max:255',
-            'period'      => 'required|string|max:255',
             'details'     => 'required|string',
             'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
@@ -43,13 +49,11 @@ class ExperienceController extends Controller
         $exp = Experience::create([
             'title'      => $data['title'],
             'company'    => $data['company'],
-            'period'     => $data['period'],
             'details'    => $data['details'],
             'start_date' => $data['start_date'] ?? null,
             'end_date'   => $data['end_date']   ?? null,
         ]);
 
-        // generate slug
         $exp->slug = "{$exp->id}-" . Str::slug("{$exp->company} {$exp->title}");
         $exp->save();
 
@@ -63,7 +67,7 @@ class ExperienceController extends Controller
         return view('experience.show', ['exp' => $experience])
                ->with([
                    'title'   => $experience->title,
-                   'heading' => "{$experience->company} • {$experience->period}"
+                   'heading' => "{$experience->company} • {$experience->period}",
                ]);
     }
 
@@ -72,12 +76,12 @@ class ExperienceController extends Controller
         $allTools = Tool::orderBy('name')->get();
 
         return view('experience.edit', [
-                 'exp'      => $experience,
-                 'allTools' => $allTools
+                  'exp'      => $experience,
+                  'allTools' => $allTools,
                ])
                ->with([
-                 'title'   => $experience->title,
-                 'heading' => "Edit Experience: {$experience->title}"
+                   'title'   => $experience->title,
+                   'heading' => "Edit Experience: {$experience->title}",
                ]);
     }
 
@@ -86,7 +90,6 @@ class ExperienceController extends Controller
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'company'     => 'required|string|max:255',
-            'period'      => 'required|string|max:255',
             'details'     => 'required|string',
             'start_date'  => 'nullable|date',
             'end_date'    => 'nullable|date',
@@ -97,7 +100,6 @@ class ExperienceController extends Controller
         $experience->update([
             'title'      => $data['title'],
             'company'    => $data['company'],
-            'period'     => $data['period'],
             'details'    => $data['details'],
             'start_date' => $data['start_date'] ?? null,
             'end_date'   => $data['end_date']   ?? null,
