@@ -1,13 +1,12 @@
 <?php
-// app/Http/Controllers/ExperienceController.php
 
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Models\Experience;
-use App\Models\Tag;   // if you’re letting users tag experiences
+use App\Models\Tag;    
 use App\Models\Tool;
+use Illuminate\Support\Facades\Auth;
 
 class ExperienceController extends Controller
 {
@@ -15,7 +14,7 @@ class ExperienceController extends Controller
     {
         $experiences = Experience::with(['skills','achievements','tools'])
                           ->orderBy('start_date','desc')
-                          ->paginate(10);
+                          ->paginate(4);
 
         return view('experience.index', compact('experiences'))
                ->with(['title'=>'My Experience','heading'=>'Experience']);
@@ -23,21 +22,26 @@ class ExperienceController extends Controller
 
     public function create()
     {
+        if(Auth::guest() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $allTools = Tool::orderBy('name')->get();
         return view('experience.create', compact('allTools'))
                ->with(['title'=>'Add Experience','heading'=>'Add Experience']);
     }
 
-
-     public function show(Experience $experience)
+    public function show(Experience $experience)
     {
-        // Pass it into the view as `$experience`
         return view('experience.show', compact('experience'));
     }
 
-
     public function store(Request $request)
     {
+        if(Auth::guest() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $data = $request->validate([
             'slug'         => 'required|string|max:255|unique:experiences,slug',
             'title'        => 'required|string|max:255',
@@ -53,7 +57,6 @@ class ExperienceController extends Controller
             'tools.*'      => 'exists:tools,id',
         ]);
 
-
         $exp = Experience::create([
             'slug'       => $data['slug'],
             'title'      => $data['title'],
@@ -61,6 +64,7 @@ class ExperienceController extends Controller
             'start_date' => $data['start_date'],
             'end_date'   => $data['end_date'] ?? null,
             'details'    => $data['details'],
+            'user_id'    => Auth::id()
         ]);
 
         foreach ($data['skills'] as $skill) {
@@ -83,6 +87,10 @@ class ExperienceController extends Controller
 
     public function edit(Experience $experience)
     {
+        if(Auth::guest() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $allTools = Tool::orderBy('name')->get();
         return view('experience.edit', compact('experience','allTools'))
                ->with(['title'=>'Edit Experience','heading'=>'Edit Experience']);
@@ -90,6 +98,10 @@ class ExperienceController extends Controller
 
     public function update(Request $request, Experience $experience)
     {
+        if(Auth::guest() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $data = $request->validate([
             'slug'         => "required|string|max:255|unique:experiences,slug,{$experience->id}",
             'title'        => 'required|string|max:255',
@@ -114,7 +126,6 @@ class ExperienceController extends Controller
             'details'    => $data['details'],
         ]);
 
-        // Re‐sync skills/achievements:
         $experience->skills()->delete();
         foreach ($data['skills'] as $skill) {
             if ($skill) {
@@ -137,6 +148,10 @@ class ExperienceController extends Controller
 
     public function destroy(Experience $experience)
     {
+        if(Auth::guest() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $experience->delete();
         return redirect()->route('experience.index')
                          ->with('success','Experience deleted.');

@@ -83,7 +83,7 @@
   </nav>
 
   {{-- PAGE HEADER (Projects & Experience index only) --}}
-  @if(request()->routeIs('projects.index') || request()->routeIs('experience.index'))
+  @if((request()->routeIs('projects.index') || request()->routeIs('experience.index')) && auth()->check() && auth()->user()->role === 'admin')
     <header class="container mx-auto w-full pt-24 pb-12 bg-white rounded-lg relative">
       <div class="sm:flex sm:justify-between inset-0 p-6 gap-3 mx-auto">
         <h1 class="mt-2 text-4xl font-semibold text-gray-600">{{ $heading }}</h1>

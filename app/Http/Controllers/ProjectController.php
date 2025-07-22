@@ -7,6 +7,7 @@ use App\Models\Tag;
 use App\Models\Tool;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
@@ -37,7 +38,7 @@ class ProjectController extends Controller
             $query->whereHas('tools', fn($q) => $q->whereIn('tools.id', $tools));
         }
 
-        $projects = $query->with(['media','tags','tools'])->paginate(12);
+        $projects = $query->with(['media','tags','tools'])->paginate(6);
         $allTypes = Project::select('type')->distinct()->pluck('type')->all();
         $allTags  = Tag::all();
         $allTools = Tool::all();
@@ -50,6 +51,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $allTypes = Project::select('type')->distinct()->pluck('type')->all();
         $allTags  = Tag::all();
         $allTools = Tool::all();
@@ -62,6 +67,10 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $data = $request->validate([
             'title'       => 'required|string|max:255',
             'description' => 'required|string',
@@ -84,6 +93,7 @@ class ProjectController extends Controller
             'title'       => $data['title'],
             'description' => $data['description'],
             'type'        => $data['type'],
+            'user_id'     => Auth::id() // Add user association
         ]);
 
         $project->tags()->sync($data['tags'] ?? []);
@@ -109,6 +119,10 @@ class ProjectController extends Controller
      */
     public function edit(Project $project)
     {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $allTypes = Project::select('type')->distinct()->pluck('type')->all();
         $allTags  = Tag::all();
         $allTools = Tool::all();
@@ -121,6 +135,10 @@ class ProjectController extends Controller
      */
     public function update(Request $request, Project $project)
     {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         $data = $request->validate([
             'title'         => 'required|string|max:255',
             'description'   => 'required|string',
@@ -183,6 +201,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if (!Auth::check() || Auth::user()->role !== 'admin') {
+            return redirect('/login');
+        }
+
         // Delete associated media files
         foreach ($project->media as $m) {
             Storage::delete($m->media_url);
