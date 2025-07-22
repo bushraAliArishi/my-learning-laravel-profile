@@ -6,9 +6,7 @@
   <title>{{ $title ?? 'Page' }}</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
-  <style>
-    html { scroll-behavior: smooth; }
-  </style>
+  <style> html { scroll-behavior: smooth; } </style>
 </head>
 <body
   x-data
@@ -21,35 +19,80 @@
   >
     <div class="container mx-auto px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold text-gray-900">Bushra Ali Arishi</h1>
+
       <button id="burger" class="md:hidden text-gray-700">☰</button>
-      <div id="links-desktop" class="hidden md:flex gap-6">
+
+      <div id="links-desktop" class="hidden md:flex gap-6 items-center">
         <x-nav-link href="/"           :active="request()->is('/')">Home</x-nav-link>
-        <x-nav-link href="/projects"   :active="request()->is('projects')">Projects</x-nav-link>
-        <x-nav-link href="/experience" :active="request()->is('experience')">Experience</x-nav-link>
-        <x-nav-link type="button" variant="dark" @click="location='{{ url('/contact') }}'">Contact</x-nav-link>
+        <x-nav-link href="/projects"   :active="request()->is('projects*')">Projects</x-nav-link>
+        <x-nav-link href="/experience" :active="request()->is('experience*')">Experience</x-nav-link>
+
+        @guest
+          {{-- Login Link --}}
+          <a
+            href="{{ route('login') }}"
+            class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition"
+          >Login</a>
+
+          {{-- Register Link --}}
+          <a
+            href="{{ route('register') }}"
+            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium rounded-lg transition"
+          >Register</a>
+        @else
+          <form method="POST" action="{{ route('logout') }}" class="inline">
+            @csrf
+            <button
+              type="submit"
+              class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white font-medium rounded-lg transition"
+            >
+              Logout
+            </button>
+          </form>
+        @endguest
       </div>
     </div>
+
+    {{-- Mobile menu --}}
     <div id="links-mobile" class="md:hidden hidden flex-col gap-3 px-6 pb-4 bg-white shadow-md border-t border-gray-200">
       <x-nav-link href="/"           :active="request()->is('/')">Home</x-nav-link>
-      <x-nav-link href="/projects"   :active="request()->is('projects')">Projects</x-nav-link>
-      <x-nav-link href="/experience" :active="request()->is('experience')">Experience</x-nav-link>
-      <x-nav-link href="/contact"    :active="request()->is('contact')">Contact</x-nav-link>
+      <x-nav-link href="/projects"   :active="request()->is('projects*')">Projects</x-nav-link>
+      <x-nav-link href="/experience" :active="request()->is('experience*')">Experience</x-nav-link>
+
+      @guest
+        <a
+          href="{{ route('login') }}"
+          class="block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-center"
+        >Login</a>
+        <a
+          href="{{ route('register') }}"
+          class="block mt-2 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-lg text-center"
+        >Register</a>
+      @else
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button
+            type="submit"
+            class="w-full text-left px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg"
+          >
+            Logout
+          </button>
+        </form>
+      @endguest
     </div>
   </nav>
 
   {{-- PAGE HEADER (Projects & Experience index only) --}}
   @if(request()->routeIs('projects.index') || request()->routeIs('experience.index'))
     <header class="container mx-auto w-full pt-24 pb-12 bg-white rounded-lg relative">
-      <div class="sm:flex sm:justify-between inset-0 rounded-lg p-6 gap-3 mx-auto">
+      <div class="sm:flex sm:justify-between inset-0 p-6 gap-3 mx-auto">
         <h1 class="mt-2 text-4xl font-semibold text-gray-600">{{ $heading }}</h1>
-
         <x-nav-link
           type="button"
           :variant="request()->routeIs('projects.index') ? 'primary' : 'purple'"
           @click="location='{{ request()->routeIs('projects.index')
               ? url('/projects/create')
               : url('/experience/create') }}'"
-          :active="request()->routeIs('projects.create') || request()->routeIs('experience.create')"
         >
           <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -79,6 +122,7 @@
         nav.classList.replace('border-gray-200','border-transparent');
       }
     });
+
     // Mobile menu toggle
     document.getElementById('burger').addEventListener('click', () => {
       document.getElementById('links-mobile').classList.toggle('hidden');

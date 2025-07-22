@@ -2,14 +2,26 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ToolController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ExperienceController;
-
+use App\Http\Controllers\RegisteredUserController;
+use App\Http\Controllers\SessionController;
 // ───────────────────────────────────────────────── Static Pages ──────
 Route::view('/',        'home',    ['title'=>'Home','heading'=>'Welcome'])->name('home');
 Route::view('/about',   'about',   ['title'=>'About Us','heading'=>'Learn More'])->name('about');
 Route::view('/contact', 'contact', ['title'=>'Contact','heading'=>'Get in Touch'])->name('contact');
+
+// ─────────────────────────────────────────────────────────────── login register ──────
+
+Route::get('/register', [RegisteredUserController::class, 'showRegisterForm'])->name('register');
+Route::post('/register', [RegisteredUserController::class, 'register'])->name('register.submit');
+
+
+Route::get('/login', [SessionController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [SessionController::class, 'login'])->name('login.submit');
+Route::post('/logout', [SessionController::class, 'logout'])->name('logout');
 
 // ─────────────────────────────────────────────────────────────── Tags & Tools ──────
 Route::post('/tags',  [TagController::class,  'store'])->name('tags.store');
