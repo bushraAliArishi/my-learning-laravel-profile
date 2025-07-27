@@ -12,7 +12,7 @@ class ProjectMediaFactory extends Factory
     public function definition(): array
     {
         return [
-            'media_url'  => 'images/logos/' . $this->faker->lexify('media-????') . '.svg',
+            'media_url' => 'images/logos/' . $this->faker->lexify('media-????') . '.svg',
             'media_type' => 'image',
         ];
     }

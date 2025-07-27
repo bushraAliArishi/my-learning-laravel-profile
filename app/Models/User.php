@@ -10,35 +10,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'first_name',
-        'last_name',
-        'username',
-        'role',
-        'email',
-        'password',
-    ];
-
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-
-    /**
-     * Default role for new users
-     */
-    protected $attributes = [
-        'role' => 'viewer',
-    ];
-
     /**
      * Roles available in the system
      */
@@ -47,6 +18,24 @@ class User extends Authenticatable
         'editor' => 'Editor',
         'viewer' => 'Viewer',
         // Add more roles as needed
+    ];
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'username',
+        'role',
+        'email',
+        'password',
+    ];
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
+    /**
+     * Default role for new users
+     */
+    protected $attributes = [
+        'role' => 'viewer',
     ];
 
     /**
@@ -79,5 +68,13 @@ class User extends Authenticatable
     public function getFullNameAttribute(): string
     {
         return "{$this->first_name} {$this->last_name}";
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+        ];
     }
 }

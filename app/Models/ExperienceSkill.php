@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← أضفّي هذا
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+// ← أضفّي هذا
 
 class ExperienceSkill extends Model
 {
-    use HasFactory;   // ← وأضفّي هذا
+    use HasFactory;
+
+    // ← وأضفّي هذا
 
     /**
      * The table associated with the model.

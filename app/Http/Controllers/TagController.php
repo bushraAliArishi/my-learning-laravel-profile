@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Tag;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class TagController extends Controller
@@ -16,14 +16,14 @@ class TagController extends Controller
         }
 
         $data = $request->validate([
-            'name'  => 'required|string|max:255|unique:tags,name',
+            'name' => 'required|string|max:255|unique:tags,name',
             'color' => 'required|string|size:7',
         ]);
 
         Tag::create([
-            'name'      => $data['name'],
+            'name' => $data['name'],
             'color_hex' => $data['color'],
-            'user_id'   => Auth::id() // Associate tag with current user
+            'user_id' => Auth::id() // Associate tag with current user
         ]);
 
         return back()->with('success', 'Tag created successfully');

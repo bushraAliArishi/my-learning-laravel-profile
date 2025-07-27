@@ -2,11 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
 use App\Models\Experience;
-use App\Models\ExperienceSkill;
 use App\Models\ExperienceAchievement;
+use App\Models\ExperienceSkill;
 use App\Models\Tool;
+use Illuminate\Database\Seeder;
 
 class ExperienceSeeder extends Seeder
 {
@@ -14,33 +14,33 @@ class ExperienceSeeder extends Seeder
     {
         $experiences = [
             'senior-technical-developer' => [
-                'title'   => 'Senior Technical Developer',
+                'title' => 'Senior Technical Developer',
                 'company' => 'i-be',
-                'period'  => 'Jan 2024 – Jul 2025',
+                'period' => 'Jan 2024 – Jul 2025',
                 'details' => 'Primary operator of Google Admin Console for 1,000+ users—managed accounts, groups, and archiving; authored guides, led trainings, and spearheaded no-code medical initiatives.',
             ],
             'technical-specialist' => [
-                'title'   => 'Technical Specialist',
+                'title' => 'Technical Specialist',
                 'company' => 'i-be Group',
-                'period'  => 'Aug 2022 – Jan 2024',
+                'period' => 'Aug 2022 – Jan 2024',
                 'details' => 'Managed internal platform builds in Bubble.io, customized interfaces, supervised interns, and coordinated stakeholder meetings for alignment.',
             ],
             'jiff-trainee' => [
-                'title'   => 'No-Code Development Trainee',
+                'title' => 'No-Code Development Trainee',
                 'company' => 'JIFF Technology',
-                'period'  => 'Jun 2022 – Aug 2023',
+                'period' => 'Jun 2022 – Aug 2023',
                 'details' => 'Completed immersive Bubble.io training covering backend logic, responsive design, and automation workflows for production readiness.',
             ],
             'call-center-agent' => [
-                'title'   => 'Call Center Agent',
+                'title' => 'Call Center Agent',
                 'company' => 'Al Khuzama Trading Co.',
-                'period'  => 'Jun 2021 – May 2022',
+                'period' => 'Jun 2021 – May 2022',
                 'details' => 'Handled high-volume customer inquiries, resolved technical issues, and created self-help materials to improve support efficiency.',
             ],
             'technical-intern' => [
-                'title'   => 'Technical Intern',
+                'title' => 'Technical Intern',
                 'company' => 'Ministry of Communications & IT',
-                'period'  => 'Jan 2021 – Jun 2021',
+                'period' => 'Jan 2021 – Jun 2021',
                 'details' => 'Assisted in digital transformation initiatives: cloud labs, automation training, and internal IT process documentation.',
             ],
         ];
@@ -132,9 +132,9 @@ class ExperienceSeeder extends Seeder
             $exp = Experience::updateOrCreate(
                 ['slug' => $slug],
                 [
-                    'title'   => $data['title'],
+                    'title' => $data['title'],
                     'company' => $data['company'],
-                    'period'  => $data['period'],
+                    'period' => $data['period'],
                     'details' => $data['details'],
                 ]
             );
@@ -144,7 +144,7 @@ class ExperienceSeeder extends Seeder
                 ExperienceSkill::updateOrCreate(
                     [
                         'experience_id' => $exp->id,
-                        'skill_name'    => $skillName,
+                        'skill_name' => $skillName,
                     ],
                     []
                 );
@@ -155,7 +155,7 @@ class ExperienceSeeder extends Seeder
                 ExperienceAchievement::updateOrCreate(
                     [
                         'experience_id' => $exp->id,
-                        'description'   => $description,
+                        'description' => $description,
                     ],
                     []
                 );
@@ -163,8 +163,8 @@ class ExperienceSeeder extends Seeder
 
             // Tools pivot
             $toolIds = Tool::whereIn('name', $toolsMap[$slug])
-                          ->pluck('id')
-                          ->toArray();
+                ->pluck('id')
+                ->toArray();
             $exp->tools()->syncWithoutDetaching($toolIds);
         }
     }

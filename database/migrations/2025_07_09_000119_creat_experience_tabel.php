@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -28,8 +27,8 @@ return new class extends Migration
         Schema::create('experience_skills', function (Blueprint $table) {
             $table->id();
             $table->foreignId('experience_id')
-                  ->constrained('experiences')
-                  ->cascadeOnDelete();
+                ->constrained('experiences')
+                ->cascadeOnDelete();
             $table->string('skill_name');
             $table->timestamps();
         });
@@ -38,8 +37,8 @@ return new class extends Migration
         Schema::create('experience_achievements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('experience_id')
-                  ->constrained('experiences')
-                  ->cascadeOnDelete();
+                ->constrained('experiences')
+                ->cascadeOnDelete();
             $table->text('description');
             $table->timestamps();
         });

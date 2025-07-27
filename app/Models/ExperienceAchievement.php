@@ -2,12 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← استوردنا الـ trait
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+
+// ← استوردنا الـ trait
 
 class ExperienceAchievement extends Model
 {
-    use HasFactory;   // ← ضفّينا الـ trait
+    use HasFactory;
+
+    // ← ضفّينا الـ trait
 
     /**
      * The table associated with the model.

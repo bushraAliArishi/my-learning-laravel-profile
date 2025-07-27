@@ -14,11 +14,11 @@ class ProjectFactory extends Factory
     {
         $title = $this->faker->sentence(3);
         return [
-            'slug'        => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1, 1000),
-            'title'       => $title,
-            'link'        => $this->faker->url(),
+            'slug' => Str::slug($title) . '-' . $this->faker->unique()->numberBetween(1, 1000),
+            'title' => $title,
+            'link' => $this->faker->url(),
             'description' => $this->faker->paragraph(),
-            'type'        => $this->faker->randomElement([
+            'type' => $this->faker->randomElement([
                 'Backend Development',
                 'No-Code Development',
                 'AI Platform Development',

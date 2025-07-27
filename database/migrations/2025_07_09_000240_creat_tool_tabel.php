@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     public function up(): void
     {
         // 1) جدول الأدوات الأساسي
@@ -20,11 +19,11 @@ return new class extends Migration
         Schema::create('experience_tool', function (Blueprint $table) {
             $table->id();
             $table->foreignId('experience_id')
-                  ->constrained('experiences')
-                  ->cascadeOnDelete();
+                ->constrained('experiences')
+                ->cascadeOnDelete();
             $table->foreignId('tool_id')
-                  ->constrained('tools')
-                  ->cascadeOnDelete();
+                ->constrained('tools')
+                ->cascadeOnDelete();
             $table->timestamps();
         });
 

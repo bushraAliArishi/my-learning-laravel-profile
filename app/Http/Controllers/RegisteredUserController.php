@@ -18,17 +18,17 @@ class RegisteredUserController extends Controller
     {
         $data = $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
-            'last_name'  => ['required', 'string', 'max:255'],
-            'username'   => ['required', 'string', 'max:255', 'unique:users'],
-            'email'      => ['required', 'email', 'max:255', 'unique:users'],
-            'password'   => ['required', 'confirmed', Password::defaults()],
+            'last_name' => ['required', 'string', 'max:255'],
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'email' => ['required', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'confirmed', Password::defaults()],
             // Remove role from validation or make it optional
         ]);
 
         // Set default role to 'viewer' and override only if admin is registering someone
-        $data['role'] = $request->has('role') && Auth::check() && Auth::user()->isAdmin() 
-                       ? $request->role 
-                       : 'viewer';
+        $data['role'] = $request->has('role') && Auth::check() && Auth::user()->isAdmin()
+            ? $request->role
+            : 'viewer';
 
         $user = User::create($data);
 
